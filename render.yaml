@@ -1,0 +1,39 @@
+# Render Blueprint — Smart Study Planner
+#
+# 1-xizmat: statik demo sahifa (baza talab qilmaydi, darhol ishlaydi).
+# 2-xizmat: to'liq ilova (Express API + React frontend). U MongoDB Atlas
+#           ulanish satrini talab qiladi, shuning uchun hozircha o'chirilgan.
+#           Yoqish uchun quyidagi blokning izohini (#) olib tashlang va
+#           Render boshqaruv panelida MONGODB_URI hamda JWT_SECRET ni kiriting.
+
+services:
+  - type: web
+    name: smart-study-planner-demo
+    runtime: static
+    buildCommand: echo "Statik demo - build talab qilinmaydi"
+    staticPublishPath: ./demo
+    pullRequestPreviewsEnabled: false
+    headers:
+      - path: /*
+        name: X-Frame-Options
+        value: SAMEORIGIN
+
+  # - type: web
+  #   name: smart-study-planner
+  #   runtime: node
+  #   region: frankfurt
+  #   plan: free
+  #   buildCommand: npm run build
+  #   startCommand: npm start
+  #   healthCheckPath: /api/health
+  #   envVars:
+  #     - key: NODE_VERSION
+  #       value: "20"
+  #     - key: NODE_ENV
+  #       value: production
+  #     - key: SEED_DEMO
+  #       value: "true"
+  #     - key: JWT_SECRET
+  #       generateValue: true
+  #     - key: MONGODB_URI
+  #       sync: false   # qiymat Render panelida qo'lda kiritiladi (maxfiy)

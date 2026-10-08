@@ -1,0 +1,29 @@
+# Bog'liqliklar
+node_modules/
+
+# Build natijalari
+dist/
+build/
+coverage/
+
+# Muhit o'zgaruvchilari — maxfiy kalitlar hech qachon GitHub'ga tushmasin
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# Loglar
+*.log
+npm-debug.log*
+
+# Muharrir va OS fayllari
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Sessiya fayllari
+.claude/scheduled_tasks.lock
+
+# Claude Code sessiya sozlamalari
+.claude/

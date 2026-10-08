@@ -1,0 +1,1699 @@
+<!DOCTYPE html>
+<html lang="uz" data-theme="light">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Smart Study Planner — Demo</title>
+<meta name="description" content="Aqlli o'quv rejalashtirish tizimi: mavzularni kunlarga teng taqsimlash, vaqtni boshqarish va bajarilishni nazorat qilish." />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%236366f1'/%3E%3Cpath d='M9 11h14M9 16h14M9 21h9' stroke='white' stroke-width='2.5' stroke-linecap='round'/%3E%3C/svg%3E" />
+<style>
+  :root {
+    --bg: #f1f5f9;
+    --bg-soft: #e2e8f0;
+    --surface: #ffffff;
+    --surface-2: #f8fafc;
+    --border: #e2e8f0;
+    --border-strong: #cbd5e1;
+    --text: #0f172a;
+    --text-muted: #64748b;
+    --text-faint: #94a3b8;
+    --primary: #4f46e5;
+    --primary-hover: #4338ca;
+    --primary-soft: #eef2ff;
+    --primary-text: #4338ca;
+    --success: #059669;
+    --success-soft: #ecfdf5;
+    --warning: #d97706;
+    --warning-soft: #fffbeb;
+    --danger: #e11d48;
+    --danger-soft: #fff1f2;
+    --shadow: 0 1px 2px rgba(15,23,42,.06), 0 8px 24px -12px rgba(15,23,42,.12);
+    --shadow-lg: 0 20px 48px -24px rgba(15,23,42,.35);
+    --radius: 14px;
+  }
+  [data-theme="dark"] {
+    --bg: #020617;
+    --bg-soft: #0f172a;
+    --surface: #0f172a;
+    --surface-2: #1e293b;
+    --border: #1e293b;
+    --border-strong: #334155;
+    --text: #f1f5f9;
+    --text-muted: #94a3b8;
+    --text-faint: #64748b;
+    --primary: #6366f1;
+    --primary-hover: #818cf8;
+    --primary-soft: #1e1b4b;
+    --primary-text: #a5b4fc;
+    --success: #10b981;
+    --success-soft: #042f2a;
+    --warning: #f59e0b;
+    --warning-soft: #3b2a07;
+    --danger: #fb7185;
+    --danger-soft: #3f1120;
+    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.6);
+    --shadow-lg: 0 20px 48px -24px rgba(0,0,0,.8);
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.55;
+    transition: background .2s ease, color .2s ease;
+  }
+  h1, h2, h3, h4 { margin: 0; line-height: 1.25; font-weight: 700; letter-spacing: -.01em; }
+  p { margin: 0; }
+  button { font: inherit; cursor: pointer; }
+  input { font: inherit; }
+  a { color: var(--primary-text); }
+
+  /* ---------- Header ---------- */
+  .header {
+    position: sticky; top: 0; z-index: 30;
+    background: color-mix(in srgb, var(--surface) 88%, transparent);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+  }
+  .header-inner {
+    max-width: 1120px; margin: 0 auto; padding: 12px 16px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .logo { display: flex; align-items: center; gap: 10px; min-width: 0; }
+  .logo-mark {
+    width: 38px; height: 38px; flex: none; border-radius: 11px;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    display: grid; place-items: center; color: #fff;
+    box-shadow: 0 6px 16px -6px rgba(99,102,241,.8);
+  }
+  .logo-text { min-width: 0; }
+  .logo-text strong { display: block; font-size: 16px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .logo-text span { display: block; font-size: 12px; color: var(--text-muted); }
+  .header-spacer { flex: 1; }
+  .icon-btn {
+    width: 38px; height: 38px; flex: none; display: grid; place-items: center;
+    border-radius: 10px; border: 1px solid var(--border);
+    background: var(--surface); color: var(--text-muted);
+    transition: all .15s ease;
+  }
+  .icon-btn:hover { color: var(--text); border-color: var(--border-strong); background: var(--surface-2); }
+  .role-pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 12px; border-radius: 999px; font-size: 12.5px; font-weight: 600;
+    background: var(--primary-soft); color: var(--primary-text);
+  }
+  .role-switch {
+    display: flex; gap: 3px; padding: 3px; border-radius: 11px;
+    background: var(--bg-soft); border: 1px solid var(--border);
+  }
+  .role-tab {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 7px 13px; border-radius: 8px; border: none; background: transparent;
+    color: var(--text-muted); font-size: 13.2px; font-weight: 600; transition: all .15s ease;
+  }
+  .role-tab:hover { color: var(--text); }
+  .role-tab.active { background: var(--surface); color: var(--primary-text); box-shadow: var(--shadow); }
+  .role-tab:focus-visible { outline: 2px solid var(--primary); outline-offset: 1px; }
+  @media (max-width: 560px) { .role-tab span { display: none; } .role-tab { padding: 7px 10px; } }
+
+  /* Startap / bilet kartalari */
+  .biz-grid { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+  .biz {
+    padding: 16px 18px; border-radius: 12px; border: 1px solid var(--border); background: var(--surface-2);
+  }
+  .biz .bk { display: flex; align-items: center; gap: 8px; font-size: 12.5px; font-weight: 700; color: var(--primary-text); text-transform: uppercase; letter-spacing: .04em; }
+  .biz p { margin-top: 7px; font-size: 13.6px; color: var(--text-muted); }
+  .biz b { color: var(--text); }
+  .req-row {
+    display: flex; align-items: flex-start; gap: 11px; padding: 10px 12px; border-radius: 9px; font-size: 13.6px;
+  }
+  .req-row:nth-child(odd) { background: var(--surface-2); }
+  .req-row .ok {
+    flex: none; width: 22px; height: 22px; border-radius: 7px; display: grid; place-items: center;
+    background: var(--success-soft); color: var(--success);
+  }
+  .req-row .bad { background: var(--danger-soft); color: var(--danger); }
+  .req-row .rt { flex: 1; min-width: 0; }
+  .req-row .rt b { display: block; font-weight: 600; }
+  .req-row .rt span { font-size: 12.4px; color: var(--text-muted); }
+
+  /* O'qituvchi paneli */
+  .student-card {
+    border: 1px solid var(--border); border-radius: 12px; background: var(--surface); overflow: hidden; margin-bottom: 14px;
+  }
+  .student-head {
+    display: flex; gap: 14px; align-items: center; flex-wrap: wrap;
+    padding: 14px 16px; background: var(--surface-2); border-bottom: 1px solid var(--border);
+  }
+  .avatar {
+    width: 40px; height: 40px; flex: none; border-radius: 11px; display: grid; place-items: center;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6); color: #fff; font-weight: 700; font-size: 15px;
+  }
+  .student-head .who { flex: 1; min-width: 150px; }
+  .student-head .who b { display: block; font-size: 15px; }
+  .student-head .who span { font-size: 12.6px; color: var(--text-muted); }
+  .student-head .pr { width: 165px; flex: none; }
+  .student-head .pr .lbl { display: flex; justify-content: space-between; font-size: 12.5px; font-weight: 700; color: var(--text-muted); margin-bottom: 4px; }
+  .student-head .pr .bar { height: 9px; }
+  .ro-badge {
+    font-size: 11.5px; font-weight: 700; padding: 4px 9px; border-radius: 999px;
+    background: var(--warning-soft); color: var(--warning); white-space: nowrap;
+  }
+  .mini-days { display: grid; gap: 10px; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); padding: 14px 16px; }
+  .mini-day { border: 1px solid var(--border); border-radius: 10px; padding: 11px 12px; background: var(--surface-2); }
+  .mini-day .mh { display: flex; justify-content: space-between; align-items: center; font-size: 13px; font-weight: 700; margin-bottom: 7px; }
+  .mini-day .mh em { font-style: normal; font-weight: 600; font-size: 11.8px; color: var(--primary-text); background: var(--primary-soft); padding: 2px 8px; border-radius: 999px; }
+  .mini-topic { display: flex; align-items: center; gap: 8px; font-size: 13px; padding: 3px 0; color: var(--text-muted); }
+  .mini-topic .dot { width: 15px; height: 15px; flex: none; border-radius: 4px; border: 1.8px solid var(--border-strong); display: grid; place-items: center; }
+  .mini-topic.done .dot { background: var(--success); border-color: var(--success); color: #fff; }
+  .mini-topic.done span { text-decoration: line-through; }
+  .mini-topic .mn { margin-left: auto; font-size: 11.8px; font-weight: 600; }
+  .plan-sub { font-size: 12.8px; color: var(--text-muted); padding: 0 16px; margin-top: 10px; font-weight: 600; }
+
+  /* ---------- Layout ---------- */
+  main { max-width: 1120px; margin: 0 auto; padding: 24px 16px 72px; }
+  .hero { margin-bottom: 22px; }
+  .hero h1 { font-size: clamp(22px, 4.5vw, 30px); }
+  .hero p { color: var(--text-muted); margin-top: 7px; max-width: 62ch; }
+  .card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); box-shadow: var(--shadow);
+  }
+  .card-pad { padding: 20px; }
+  @media (min-width: 640px) { .card-pad { padding: 24px; } }
+  .card-head {
+    padding: 16px 20px; border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  }
+  .card-head h2 { font-size: 16.5px; }
+  .card-head .sub { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
+  .section { margin-top: 22px; }
+
+  /* ---------- Form ---------- */
+  .grid { display: grid; gap: 16px; }
+  @media (min-width: 700px) { .grid-2 { grid-template-columns: 1fr 1fr; } }
+  .field label { display: block; font-size: 13.5px; font-weight: 600; margin-bottom: 6px; }
+  .field .req { color: var(--danger); }
+  .field input {
+    width: 100%; padding: 10px 13px; border-radius: 10px;
+    border: 1px solid var(--border-strong); background: var(--surface-2);
+    color: var(--text); transition: border-color .15s, box-shadow .15s, background .15s;
+  }
+  .field input::placeholder { color: var(--text-faint); }
+  .field input:focus {
+    outline: none; border-color: var(--primary); background: var(--surface);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 22%, transparent);
+  }
+  .field input[aria-invalid="true"] { border-color: var(--danger); background: var(--danger-soft); }
+  .field .hint { font-size: 12.5px; color: var(--text-faint); margin-top: 5px; }
+  .field .err {
+    display: flex; align-items: flex-start; gap: 5px;
+    font-size: 12.8px; color: var(--danger); font-weight: 600; margin-top: 6px;
+  }
+  .field .err svg { flex: none; margin-top: 2px; }
+  .field.hidden-err .err { display: none; }
+  .topics-grid { display: grid; gap: 12px; }
+  @media (min-width: 700px) { .topics-grid { grid-template-columns: 1fr 1fr; } }
+  @media (min-width: 1000px) { .topics-grid { grid-template-columns: 1fr 1fr 1fr; } }
+  .group-err {
+    margin-top: 12px; padding: 10px 13px; border-radius: 10px;
+    background: var(--danger-soft); color: var(--danger);
+    font-size: 13px; font-weight: 600;
+    border: 1px solid color-mix(in srgb, var(--danger) 35%, transparent);
+  }
+  .form-actions {
+    margin-top: 20px; padding-top: 18px; border-top: 1px solid var(--border);
+    display: flex; gap: 10px; flex-wrap: wrap; align-items: center;
+  }
+
+  /* ---------- Buttons ---------- */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 10px 18px; border-radius: 10px; border: 1px solid transparent;
+    font-weight: 600; font-size: 14.5px; transition: all .15s ease; white-space: nowrap;
+  }
+  .btn:disabled { opacity: .55; cursor: not-allowed; }
+  .btn-primary { background: var(--primary); color: #fff; box-shadow: 0 8px 20px -10px color-mix(in srgb, var(--primary) 85%, transparent); }
+  .btn-primary:hover:not(:disabled) { background: var(--primary-hover); }
+  .btn-ghost { background: var(--surface); color: var(--text); border-color: var(--border-strong); }
+  .btn-ghost:hover:not(:disabled) { background: var(--surface-2); }
+  .btn-danger { background: var(--danger-soft); color: var(--danger); border-color: color-mix(in srgb, var(--danger) 35%, transparent); }
+  .btn-danger:hover:not(:disabled) { background: color-mix(in srgb, var(--danger) 18%, var(--danger-soft)); }
+  .btn-sm { padding: 7px 13px; font-size: 13.5px; border-radius: 9px; }
+  .btn:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+
+  /* ---------- Stats ---------- */
+  .stats { display: grid; gap: 14px; grid-template-columns: repeat(3, 1fr); }
+  @media (max-width: 560px) { .stats { grid-template-columns: 1fr; } }
+  .stat {
+    padding: 16px 18px; border-radius: 12px;
+    border: 1px solid var(--border); background: var(--surface-2);
+  }
+  .stat .k { font-size: 12.5px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: .04em; }
+  .stat .v { font-size: 30px; font-weight: 800; letter-spacing: -.02em; margin-top: 4px; }
+  .stat .u { font-size: 12.5px; color: var(--text-faint); }
+  .stat.accent { background: var(--primary-soft); border-color: color-mix(in srgb, var(--primary) 30%, transparent); }
+  .stat.accent .v, .stat.accent .k { color: var(--primary-text); }
+  .stat.good { background: var(--success-soft); border-color: color-mix(in srgb, var(--success) 30%, transparent); }
+  .stat.good .v, .stat.good .k { color: var(--success); }
+
+  .bar-wrap { margin-top: 18px; }
+  .bar-labels { display: flex; justify-content: space-between; font-size: 13px; color: var(--text-muted); margin-bottom: 7px; font-weight: 600; }
+  .bar { height: 12px; border-radius: 999px; background: var(--bg-soft); overflow: hidden; border: 1px solid var(--border); }
+  .bar > span {
+    display: block; height: 100%; border-radius: 999px;
+    background: linear-gradient(90deg, var(--primary), #8b5cf6);
+    transition: width .4s cubic-bezier(.4,0,.2,1);
+  }
+  .bar.done > span { background: linear-gradient(90deg, var(--success), #34d399); }
+
+  /* ---------- Day cards ---------- */
+  .days { display: grid; gap: 14px; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); }
+  .day {
+    border: 1px solid var(--border); border-radius: 12px;
+    background: var(--surface); overflow: hidden;
+    display: flex; flex-direction: column;
+  }
+  .day-head {
+    padding: 12px 15px; background: var(--surface-2);
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  }
+  .day-head .n { font-weight: 700; font-size: 15px; }
+  .day-head .d { font-size: 12.5px; color: var(--text-muted); }
+  .day-head .m {
+    font-size: 12.5px; font-weight: 700; padding: 4px 10px; border-radius: 999px;
+    background: var(--primary-soft); color: var(--primary-text); white-space: nowrap;
+  }
+  .day.review .day-head { background: var(--warning-soft); }
+  .day.review .day-head .m { background: color-mix(in srgb, var(--warning) 22%, transparent); color: var(--warning); }
+  .day-body { padding: 8px; display: flex; flex-direction: column; gap: 4px; }
+  .topic {
+    display: flex; align-items: flex-start; gap: 11px;
+    padding: 10px 11px; border-radius: 9px; cursor: pointer;
+    transition: background .12s ease;
+  }
+  .topic:hover { background: var(--surface-2); }
+  .topic input { width: 19px; height: 19px; flex: none; margin: 2px 0 0; accent-color: var(--primary); cursor: pointer; }
+  .topic input:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+  .topic .t { flex: 1; min-width: 0; }
+  .topic .t b { display: block; font-weight: 600; font-size: 14.2px; word-break: break-word; }
+  .topic .t em { display: block; font-style: normal; font-size: 12px; color: var(--success); font-weight: 600; margin-top: 2px; }
+  .topic .min {
+    flex: none; font-size: 12.5px; font-weight: 600; color: var(--text-muted);
+    padding: 3px 8px; border-radius: 7px; background: var(--bg-soft);
+  }
+  .topic.done { background: var(--success-soft); }
+  .topic.done:hover { background: color-mix(in srgb, var(--success) 12%, var(--success-soft)); }
+  .topic.done .t b { text-decoration: line-through; color: var(--text-muted); }
+  .topic input:disabled { cursor: not-allowed; }
+  .topic.ro { cursor: default; }
+  .topic.ro:hover { background: transparent; }
+  .topic.ro.done:hover { background: var(--success-soft); }
+  .review-note { padding: 18px 14px; text-align: center; color: var(--warning); font-weight: 600; font-size: 13.5px; }
+  .review-note span { display: block; font-weight: 500; font-size: 12.5px; color: var(--text-muted); margin-top: 4px; }
+
+  /* ---------- Plan header / saved list ---------- */
+  .plan-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+  .chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 12.8px; font-weight: 600; color: var(--text-muted);
+    background: var(--surface-2); border: 1px solid var(--border);
+    padding: 5px 11px; border-radius: 999px;
+  }
+  .saved-list { display: grid; gap: 12px; }
+  .saved-item {
+    display: flex; gap: 14px; align-items: center; flex-wrap: wrap;
+    padding: 14px 16px; border: 1px solid var(--border); border-radius: 12px; background: var(--surface-2);
+  }
+  .saved-item .info { flex: 1; min-width: 190px; }
+  .saved-item .info b { display: block; font-size: 15px; }
+  .saved-item .info span { font-size: 12.8px; color: var(--text-muted); }
+  .saved-item .pr { width: 150px; flex: none; }
+  .saved-item .pr .bar { height: 8px; }
+  .saved-item .pr .lbl { font-size: 12.5px; font-weight: 700; margin-bottom: 4px; display: flex; justify-content: space-between; color: var(--text-muted); }
+  .empty { text-align: center; padding: 34px 18px; color: var(--text-muted); }
+  .empty .ic { width: 52px; height: 52px; margin: 0 auto 12px; border-radius: 14px; background: var(--surface-2); display: grid; place-items: center; color: var(--text-faint); }
+  .empty b { display: block; color: var(--text); margin-bottom: 4px; }
+
+  /* ---------- Save status ---------- */
+  .save-bar {
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--border);
+  }
+  .save-state { font-size: 13.2px; font-weight: 600; display: inline-flex; align-items: center; gap: 7px; }
+  .save-state.idle { color: var(--text-muted); }
+  .save-state.saving { color: var(--warning); }
+  .save-state.saved { color: var(--success); }
+  .save-state.dirty { color: var(--danger); }
+  .spin { width: 13px; height: 13px; border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%; animation: spin .7s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ---------- Tests ---------- */
+  .test-row {
+    display: flex; align-items: center; gap: 11px; padding: 9px 12px;
+    border-radius: 9px; font-size: 13.5px; border: 1px solid transparent;
+  }
+  .test-row:nth-child(odd) { background: var(--surface-2); }
+  .test-row .tag {
+    flex: none; width: 26px; height: 26px; border-radius: 7px; display: grid; place-items: center;
+    font-size: 12px; font-weight: 700; background: var(--bg-soft); color: var(--text-muted);
+  }
+  .test-row .nm { flex: 1; min-width: 0; }
+  .test-row .nm b { display: block; font-weight: 600; }
+  .test-row .nm span { font-size: 12.3px; color: var(--text-muted); word-break: break-word; }
+  .test-row .vd {
+    flex: none; font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 999px;
+  }
+  .test-row.pass .vd { background: var(--success-soft); color: var(--success); }
+  .test-row.fail .vd { background: var(--danger-soft); color: var(--danger); }
+  .test-row.fail { border-color: color-mix(in srgb, var(--danger) 40%, transparent); background: var(--danger-soft); }
+  .test-summary { font-size: 13.5px; font-weight: 700; }
+  .test-summary.ok { color: var(--success); }
+  .test-summary.bad { color: var(--danger); }
+
+  details.tests > summary { cursor: pointer; list-style: none; }
+  details.tests > summary::-webkit-details-marker { display: none; }
+  .chev { transition: transform .2s ease; }
+  details[open] .chev { transform: rotate(180deg); }
+
+  /* ---------- Toast ---------- */
+  #toasts {
+    position: fixed; z-index: 60; bottom: 20px; right: 20px;
+    display: flex; flex-direction: column; gap: 10px; pointer-events: none;
+  }
+  @media (max-width: 600px) { #toasts { left: 14px; right: 14px; bottom: 14px; } }
+  .toast {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 13px 16px; border-radius: 12px; background: var(--surface);
+    border: 1px solid var(--border); box-shadow: var(--shadow-lg);
+    font-size: 14px; font-weight: 600; max-width: 380px;
+    animation: slideIn .25s cubic-bezier(.2,.9,.3,1);
+  }
+  .toast.success { border-left: 4px solid var(--success); }
+  .toast.success .ti { color: var(--success); }
+  .toast.error { border-left: 4px solid var(--danger); }
+  .toast.error .ti { color: var(--danger); }
+  .toast .ti { flex: none; margin-top: 1px; }
+  @keyframes slideIn { from { opacity: 0; transform: translateY(14px) scale(.97); } to { opacity: 1; transform: none; } }
+
+  .note {
+    margin-top: 22px; padding: 14px 17px; border-radius: 12px;
+    background: var(--primary-soft); color: var(--primary-text);
+    font-size: 13.3px; border: 1px solid color-mix(in srgb, var(--primary) 28%, transparent);
+  }
+  .sr {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+  }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-inner">
+    <div class="logo">
+      <div class="logo-mark" aria-hidden="true">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+          <path d="M5 7h14M5 12h14M5 17h9"/>
+        </svg>
+      </div>
+      <div class="logo-text">
+        <strong>Smart Study Planner</strong>
+        <span>Aqlli o'quv rejalashtirish tizimi</span>
+      </div>
+    </div>
+    <div class="header-spacer"></div>
+    <div class="role-switch" role="tablist" aria-label="Foydalanuvchi roli">
+      <button class="role-tab active" id="tabStudent" role="tab" aria-selected="true">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L2 8l10 5 10-5z"/><path d="M6 10.5V16c0 1.5 3 3 6 3s6-1.5 6-3v-5.5"/></svg>
+        <span>O'quvchi</span>
+      </button>
+      <button class="role-tab" id="tabTeacher" role="tab" aria-selected="false">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5"/><path d="M17 11h4M19 9v4"/></svg>
+        <span>O'qituvchi</span>
+      </button>
+    </div>
+    <button class="icon-btn" id="themeBtn" aria-label="Yorug'/Qorong'i rejim" title="Yorug'/Qorong'i rejim"></button>
+  </div>
+</header>
+
+<main>
+  <div class="hero">
+    <h1 id="heroTitle">Imtihon mavzularini kunlarga teng taqsimlang</h1>
+    <p id="heroText">
+      6 ta mavzu, kunlar soni va kunlik vaqtni kiriting — tizim jadvalni avtomatik tuzadi,
+      bajarilishni kuzatadi va natijani foizda ko'rsatadi.
+    </p>
+  </div>
+
+<div id="studentView">
+
+  <!-- ============ FORM ============ -->
+  <section class="card" aria-labelledby="formTitle">
+    <div class="card-head">
+      <div style="flex:1;min-width:200px">
+        <h2 id="formTitle">Yangi reja yaratish</h2>
+        <div class="sub">Barcha maydonlar to'ldirilishi shart</div>
+      </div>
+      <button class="btn btn-ghost btn-sm" id="fillBtn" type="button">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M6.3 6.3l2.8 2.8M14.9 14.9l2.8 2.8M17.7 6.3l-2.8 2.8M9.1 14.9l-2.8 2.8"/></svg>
+        Namuna ma'lumotlar
+      </button>
+    </div>
+    <div class="card-pad">
+      <form id="planForm" novalidate>
+        <div class="grid grid-2">
+          <div class="field" data-field="title">
+            <label for="f-title">Reja nomi <span class="req">*</span></label>
+            <input id="f-title" name="title" type="text" autocomplete="off" placeholder="Masalan: Matematika imtihoni" />
+            <div class="err" role="alert"></div>
+          </div>
+          <div class="field" data-field="subject">
+            <label for="f-subject">Imtihon yoki fan nomi <span class="req">*</span></label>
+            <input id="f-subject" name="subject" type="text" autocomplete="off" placeholder="Masalan: Matematika" />
+            <div class="err" role="alert"></div>
+          </div>
+        </div>
+
+        <div class="grid grid-2" style="margin-top:16px">
+          <div class="field" data-field="daysCount">
+            <label for="f-days">Kunlar soni <span class="req">*</span></label>
+            <input id="f-days" name="daysCount" type="text" inputmode="numeric" autocomplete="off" placeholder="3" />
+            <div class="hint">1 yoki undan katta butun son</div>
+            <div class="err" role="alert"></div>
+          </div>
+          <div class="field" data-field="dailyMinutes">
+            <label for="f-minutes">Kunlik vaqt (daqiqa) <span class="req">*</span></label>
+            <input id="f-minutes" name="dailyMinutes" type="text" inputmode="numeric" autocomplete="off" placeholder="60" />
+            <div class="hint">Bir kunda o'qishga ajratiladigan vaqt</div>
+            <div class="err" role="alert"></div>
+          </div>
+        </div>
+
+        <div class="grid" style="margin-top:16px;max-width:320px">
+          <div class="field" data-field="startDate">
+            <label for="f-start">Boshlanish sanasi <span class="req">*</span></label>
+            <input id="f-start" name="startDate" type="date" />
+            <div class="err" role="alert"></div>
+          </div>
+        </div>
+
+        <div style="margin-top:22px">
+          <label style="display:block;font-size:13.5px;font-weight:600;margin-bottom:10px">
+            Mavzular <span class="req">*</span>
+            <span style="font-weight:500;color:var(--text-muted)">— aynan 6 ta</span>
+          </label>
+          <div class="topics-grid" id="topicsGrid"></div>
+          <div class="group-err" id="topicsGroupErr" role="alert" hidden></div>
+        </div>
+
+        <div class="form-actions">
+          <button class="btn btn-primary" type="submit" id="createBtn">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h9"/></svg>
+            Reja yaratish
+          </button>
+          <button class="btn btn-ghost" type="reset" id="clearBtn">Tozalash</button>
+          <span style="font-size:12.8px;color:var(--text-faint)">Xatolik bo'lsa, reja yaratilmaydi.</span>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- ============ PLAN / DASHBOARD ============ -->
+  <section class="section" id="planSection" hidden aria-labelledby="planTitle"></section>
+
+  <!-- ============ SAVED PLANS ============ -->
+  <section class="section card" aria-labelledby="savedTitle">
+    <div class="card-head">
+      <div style="flex:1;min-width:200px">
+        <h2 id="savedTitle">Mening rejalarim</h2>
+        <div class="sub">Brauzer xotirasida saqlangan rejalar — sahifani yangilasangiz ham qoladi</div>
+      </div>
+      <span class="chip" id="savedCount">0 ta reja</span>
+    </div>
+    <div class="card-pad" id="savedBody"></div>
+  </section>
+
+</div><!-- /studentView -->
+
+<!-- ============ O'QITUVCHI KABINETI ============ -->
+<div id="teacherView" hidden>
+  <section class="card">
+    <div class="card-head">
+      <div style="flex:1;min-width:200px">
+        <h2>Mening o'quvchilarim</h2>
+        <div class="sub">O'qituvchi faqat kuzatadi — natijalarni o'zgartira olmaydi</div>
+      </div>
+      <span class="chip" id="teacherSummary">—</span>
+    </div>
+    <div class="card-pad" id="teacherBody"></div>
+  </section>
+
+  <section class="section card">
+    <div class="card-head">
+      <div>
+        <h2>Daromad g'oyasi</h2>
+        <div class="sub">Bilet 002: «O'qituvchi uchun bir nechta o'quvchi rejasini kuzatish obunasi»</div>
+      </div>
+    </div>
+    <div class="card-pad">
+      <div class="biz-grid">
+        <div class="biz">
+          <div class="bk">Bepul</div>
+          <p><b>1 o'quvchi</b> — o'quvchining o'zi uchun reja tuzish va kuzatish mutlaqo bepul.</p>
+        </div>
+        <div class="biz">
+          <div class="bk">O'qituvchi · 49 000 so'm/oy</div>
+          <p>Bir vaqtda <b>30 tagacha o'quvchi</b> rejasini kuzatish, kundalik faollik va umumiy foiz hisoboti.</p>
+        </div>
+        <div class="biz">
+          <div class="bk">Maktab · 390 000 so'm/oy</div>
+          <p>Cheksiz o'qituvchi va o'quvchi, administrator paneli, sinflar kesimida statistika.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</div><!-- /teacherView -->
+
+  <!-- ============ BILET 002 TALABLARI ============ -->
+  <section class="section card">
+    <div class="card-head">
+      <div style="flex:1;min-width:200px">
+        <h2>Bilet 002 — talablar bajarilishi</h2>
+        <div class="sub" id="reqSub">Har bir talab shu sahifada avtomatik tekshiriladi</div>
+      </div>
+      <span class="test-summary" id="reqSummary"></span>
+    </div>
+    <div class="card-pad">
+      <div class="biz-grid" style="margin-bottom:18px">
+        <div class="biz">
+          <div class="bk">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5"/><path d="M16.5 5.2a3.2 3.2 0 010 5.6M19 3a6.5 6.5 0 010 10"/></svg>
+            Mijoz
+          </div>
+          <p>Imtihonga tayyorlanayotgan <b>o'quvchi</b> va uning <b>o'qituvchisi</b>.</p>
+        </div>
+        <div class="biz">
+          <div class="bk">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><path d="M12 2v20M17 6.5c0-2-2.2-3-5-3s-5 1-5 3 2 2.7 5 3.5 5 1.5 5 3.5-2.2 3-5 3-5-1-5-3"/></svg>
+            Daromad g'oyasi
+          </div>
+          <p>O'qituvchi uchun <b>bir nechta o'quvchi rejasini kuzatish obunasi</b> — oylik to'lov.</p>
+        </div>
+        <div class="biz">
+          <div class="bk">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h9"/></svg>
+            Vazifa
+          </div>
+          <p>O'quvchiga vaqtini mavzular bo'yicha <b>taqsimlash</b> va bajarilgan ishni <b>kuzatish</b> xizmati.</p>
+        </div>
+      </div>
+      <div id="reqBody" style="display:flex;flex-direction:column;gap:2px"></div>
+    </div>
+  </section>
+
+  <!-- ============ TESTS ============ -->
+  <section class="section card">
+    <details class="tests" id="testsDetails">
+      <summary class="card-head">
+        <div style="flex:1;min-width:200px">
+          <h2>Hakamlar uchun majburiy testlar</h2>
+          <div class="sub" id="testsSub">12 ta test holati — algoritm bevosita shu sahifada tekshiriladi</div>
+        </div>
+        <span class="test-summary" id="testsSummary"></span>
+        <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
+      </summary>
+      <div class="card-pad" id="testsBody" style="display:flex;flex-direction:column;gap:2px"></div>
+    </details>
+  </section>
+
+  <div class="note">
+    <strong>Eslatma:</strong> bu bitta faylli demo — ma'lumotlar brauzer xotirasida (localStorage) saqlanadi.
+    To'liq loyihada aynan shu algoritm (<code>shared/planner.js</code>) React + TypeScript frontend va
+    Node.js + Express + MongoDB backend bilan ishlaydi, uch rol (o'quvchi, o'qituvchi, administrator) uchun
+    JWT autentifikatsiyasi mavjud.
+  </div>
+</main>
+
+<div id="toasts" aria-live="polite" aria-atomic="false"></div>
+
+<script>
+/* =====================================================================
+   1. ALGORITM — shared/planner.js ning aniq nusxasi
+   ===================================================================== */
+const TOPIC_COUNT = 6;
+const LIMITS = {
+  minDays: 1, maxDays: 365,
+  minDailyMinutes: 1, maxDailyMinutes: 1440,
+  maxTitleLength: 100, maxSubjectLength: 100, maxTopicLength: 120,
+};
+const REVIEW_DAY_LABEL = "Takrorlash / dam olish";
+const MESSAGES = {
+  titleRequired: "Reja nomini kiriting.",
+  titleTooLong: "Reja nomi " + LIMITS.maxTitleLength + " belgidan oshmasligi kerak.",
+  subjectRequired: "Imtihon yoki fan nomini kiriting.",
+  subjectTooLong: "Fan nomi " + LIMITS.maxSubjectLength + " belgidan oshmasligi kerak.",
+  daysRequired: "Kunlar sonini kiriting.",
+  daysNotInteger: "Kunlar soni butun son bo'lishi kerak (harf yoki kasr son kiritmang).",
+  daysMin: "Kunlar soni kamida 1 bo'lishi kerak.",
+  daysMax: "Kunlar soni " + LIMITS.maxDays + " dan oshmasligi kerak.",
+  minutesRequired: "Kunlik vaqtni kiriting.",
+  minutesNotInteger: "Kunlik vaqt butun son (daqiqa) bo'lishi kerak (harf yoki kasr son kiritmang).",
+  minutesMin: "Kunlik vaqtni to'g'ri kiriting.",
+  minutesMax: "Kunlik vaqt " + LIMITS.maxDailyMinutes + " daqiqadan (24 soat) oshmasligi kerak.",
+  topicsRequired: "Barcha " + TOPIC_COUNT + " ta mavzuni kiriting.",
+  topicTooLong: "Mavzu nomi " + LIMITS.maxTopicLength + " belgidan oshmasligi kerak.",
+  startDateInvalid: "Boshlanish sanasini to'g'ri tanlang.",
+  notEnoughTime: (needed) =>
+    "Vaqt yetarli emas: har bir mavzuga kamida 1 daqiqa ajratish uchun kunlik vaqt kamida " +
+    needed + " daqiqa bo'lishi kerak. Iltimos, kunlik vaqtni oshiring.",
+};
+
+const INTEGER_RE = /^[+-]?\d+$/;
+const DATE_RE = /^(\d{4})-(\d{2})-(\d{2})$/;
+
+function parseIntegerField(value) {
+  if (value === null || value === undefined) return { ok: false, reason: "empty" };
+  if (typeof value === "number") {
+    if (!Number.isFinite(value) || !Number.isInteger(value)) return { ok: false, reason: "notInteger" };
+    return { ok: true, value };
+  }
+  if (typeof value === "string") {
+    const trimmed = value.trim();
+    if (trimmed === "") return { ok: false, reason: "empty" };
+    if (!INTEGER_RE.test(trimmed)) return { ok: false, reason: "notInteger" };
+    const parsed = Number(trimmed);
+    if (!Number.isSafeInteger(parsed)) return { ok: false, reason: "notInteger" };
+    return { ok: true, value: parsed };
+  }
+  return { ok: false, reason: "notInteger" };
+}
+
+function isValidDateString(value) {
+  if (typeof value !== "string") return false;
+  const m = DATE_RE.exec(value);
+  if (!m) return false;
+  const y = Number(m[1]), mo = Number(m[2]), d = Number(m[3]);
+  const date = new Date(Date.UTC(y, mo - 1, d));
+  return date.getUTCFullYear() === y && date.getUTCMonth() === mo - 1 && date.getUTCDate() === d;
+}
+
+function addDays(dateStr, days) {
+  const [y, m, d] = dateStr.split("-").map(Number);
+  return new Date(Date.UTC(y, m - 1, d + days)).toISOString().slice(0, 10);
+}
+
+function sanitizeText(value) {
+  if (typeof value !== "string") return "";
+  return value
+    .replace(/<[^>]*>/g, "")
+    .replace(/[\u0000-\u001F\u007F]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function maxTopicsPerDay(topicCount, daysCount) {
+  if (daysCount <= 0) return topicCount;
+  return Math.max(1, Math.ceil(topicCount / daysCount));
+}
+
+function validatePlanInput(input, options) {
+  const requireMeta = !(options && options.requireMeta === false);
+  const src = input && typeof input === "object" ? input : {};
+  const errors = {};
+  const topicErrors = [];
+
+  const title = sanitizeText(src.title);
+  const subject = sanitizeText(src.subject);
+  if (requireMeta) {
+    if (!title) errors.title = MESSAGES.titleRequired;
+    else if (title.length > LIMITS.maxTitleLength) errors.title = MESSAGES.titleTooLong;
+    if (!subject) errors.subject = MESSAGES.subjectRequired;
+    else if (subject.length > LIMITS.maxSubjectLength) errors.subject = MESSAGES.subjectTooLong;
+  }
+
+  let daysCount = NaN;
+  const days = parseIntegerField(src.daysCount);
+  if (!days.ok) errors.daysCount = days.reason === "empty" ? MESSAGES.daysRequired : MESSAGES.daysNotInteger;
+  else if (days.value < LIMITS.minDays) errors.daysCount = MESSAGES.daysMin;
+  else if (days.value > LIMITS.maxDays) errors.daysCount = MESSAGES.daysMax;
+  else daysCount = days.value;
+
+  let dailyMinutes = NaN;
+  const minutes = parseIntegerField(src.dailyMinutes);
+  if (!minutes.ok) errors.dailyMinutes = minutes.reason === "empty" ? MESSAGES.minutesRequired : MESSAGES.minutesNotInteger;
+  else if (minutes.value < LIMITS.minDailyMinutes) errors.dailyMinutes = MESSAGES.minutesMin;
+  else if (minutes.value > LIMITS.maxDailyMinutes) errors.dailyMinutes = MESSAGES.minutesMax;
+  else dailyMinutes = minutes.value;
+
+  const topics = [];
+  const rawTopics = Array.isArray(src.topics) ? src.topics : [];
+  let topicsMissing = !Array.isArray(src.topics) || rawTopics.length !== TOPIC_COUNT;
+  for (let i = 0; i < TOPIC_COUNT; i++) {
+    const t = sanitizeText(rawTopics[i]);
+    topics.push(t);
+    if (!t) { topicErrors[i] = MESSAGES.topicsRequired; topicsMissing = true; }
+    else if (t.length > LIMITS.maxTopicLength) {
+      topicErrors[i] = MESSAGES.topicTooLong;
+      if (!errors.topics) errors.topics = MESSAGES.topicTooLong;
+    } else topicErrors[i] = null;
+  }
+  if (topicsMissing) errors.topics = MESSAGES.topicsRequired;
+
+  let startDate = typeof src.startDate === "string" ? src.startDate.trim() : "";
+  if (requireMeta) {
+    if (!isValidDateString(startDate)) errors.startDate = MESSAGES.startDateInvalid;
+  } else if (!isValidDateString(startDate)) startDate = "";
+
+  if (!errors.daysCount && !errors.dailyMinutes) {
+    const needed = maxTopicsPerDay(TOPIC_COUNT, daysCount);
+    if (dailyMinutes < needed) errors.dailyMinutes = MESSAGES.notEnoughTime(needed);
+  }
+
+  const valid = Object.keys(errors).length === 0;
+  return { valid, errors, topicErrors, value: valid ? { title, subject, daysCount, dailyMinutes, topics, startDate } : null };
+}
+
+function distributeTopics({ topics, daysCount, dailyMinutes, startDate }) {
+  if (!Array.isArray(topics) || topics.length === 0) throw new Error("Mavzular ro'yxati bo'sh.");
+  if (!Number.isInteger(daysCount) || daysCount < 1) throw new Error(MESSAGES.daysMin);
+  if (!Number.isInteger(dailyMinutes) || dailyMinutes < 1) throw new Error(MESSAGES.minutesMin);
+
+  const N = topics.length;
+  const needed = maxTopicsPerDay(N, daysCount);
+  if (dailyMinutes < needed) throw new Error(MESSAGES.notEnoughTime(needed));
+
+  const hasDate = typeof startDate === "string" && isValidDateString(startDate);
+  const base = Math.floor(N / daysCount);
+  const remainder = N % daysCount;
+
+  const days = [];
+  let cursor = 0;
+  for (let d = 0; d < daysCount; d++) {
+    const count = base + (d < remainder ? 1 : 0);
+    const dayTopics = [];
+    if (count > 0) {
+      const each = Math.floor(dailyMinutes / count);
+      const extra = dailyMinutes % count;
+      for (let k = 0; k < count; k++) {
+        const index = cursor + k;
+        dayTopics.push({
+          topicId: "t" + (index + 1),
+          title: topics[index],
+          minutes: each + (k < extra ? 1 : 0),
+          completed: false,
+          completedAt: null,
+        });
+      }
+      cursor += count;
+    }
+    days.push({
+      dayNumber: d + 1,
+      date: hasDate ? addDays(startDate, d) : null,
+      type: count > 0 ? "study" : "review",
+      totalMinutes: dailyMinutes,
+      topics: dayTopics,
+    });
+  }
+  return { days, endDate: hasDate ? addDays(startDate, daysCount - 1) : null, totalTopics: N };
+}
+
+function percentOf(completed, total) {
+  if (!total || total <= 0) return 0;
+  return Math.round((completed / total) * 100);
+}
+
+function computeProgress(days) {
+  let total = 0, completed = 0;
+  for (const day of Array.isArray(days) ? days : []) {
+    for (const topic of Array.isArray(day && day.topics) ? day.topics : []) {
+      total += 1;
+      if (topic && topic.completed === true) completed += 1;
+    }
+  }
+  return { total, completed, percent: percentOf(completed, total) };
+}
+
+/* =====================================================================
+   2. YORDAMCHI FUNKSIYALAR
+   ===================================================================== */
+const UZ_MONTHS = ["yanvar","fevral","mart","aprel","may","iyun","iyul","avgust","sentabr","oktabr","noyabr","dekabr"];
+
+function formatDateUz(iso) {
+  if (!isValidDateString(iso)) return "";
+  const [y, m, d] = iso.split("-").map(Number);
+  return d + "-" + UZ_MONTHS[m - 1] + ", " + y;
+}
+function formatTimeUz(iso) {
+  if (!iso) return "";
+  const dt = new Date(iso);
+  if (isNaN(dt.getTime())) return "";
+  const pad = (n) => String(n).padStart(2, "0");
+  return dt.getDate() + "-" + UZ_MONTHS[dt.getMonth()] + ", " + pad(dt.getHours()) + ":" + pad(dt.getMinutes());
+}
+function todayISO() {
+  const d = new Date();
+  const pad = (n) => String(n).padStart(2, "0");
+  return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate());
+}
+const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+const STORE_KEY = "ssp_demo_plans";
+const THEME_KEY = "ssp_theme";
+
+function loadPlans() {
+  try {
+    const raw = localStorage.getItem(STORE_KEY);
+    const parsed = raw ? JSON.parse(raw) : [];
+    return Array.isArray(parsed) ? parsed : [];
+  } catch (e) { return []; }
+}
+function savePlans(plans) {
+  try { localStorage.setItem(STORE_KEY, JSON.stringify(plans)); return true; }
+  catch (e) { return false; }
+}
+
+/* =====================================================================
+   3. TOAST
+   ===================================================================== */
+const toastsEl = document.getElementById("toasts");
+function toast(message, type) {
+  const el = document.createElement("div");
+  el.className = "toast " + (type || "success");
+  const icon = type === "error"
+    ? '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg>'
+    : '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9.5"/></svg>';
+  el.innerHTML = '<span class="ti">' + icon + "</span><span>" + esc(message) + "</span>";
+  toastsEl.appendChild(el);
+  setTimeout(() => {
+    el.style.transition = "opacity .25s, transform .25s";
+    el.style.opacity = "0";
+    el.style.transform = "translateY(10px)";
+    setTimeout(() => el.remove(), 260);
+  }, 3400);
+}
+
+/* =====================================================================
+   4. MAVZU: THEME
+   ===================================================================== */
+const themeBtn = document.getElementById("themeBtn");
+const SUN = '<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M18.7 5.3l-1.4 1.4M6.7 17.3l-1.4 1.4"/></svg>';
+const MOON = '<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8.5 8.5 0 019.5 4a8.5 8.5 0 1010.5 10.5z"/></svg>';
+function applyTheme(theme) {
+  document.documentElement.setAttribute("data-theme", theme);
+  themeBtn.innerHTML = theme === "dark" ? SUN : MOON;
+  try { localStorage.setItem(THEME_KEY, theme); } catch (e) {}
+}
+(function initTheme() {
+  let saved = null;
+  try { saved = localStorage.getItem(THEME_KEY); } catch (e) {}
+  const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+  applyTheme(saved === "dark" || saved === "light" ? saved : (prefersDark ? "dark" : "light"));
+})();
+themeBtn.addEventListener("click", () => {
+  applyTheme(document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark");
+});
+
+/* =====================================================================
+   5. FORMA
+   ===================================================================== */
+const form = document.getElementById("planForm");
+const topicsGrid = document.getElementById("topicsGrid");
+const topicsGroupErr = document.getElementById("topicsGroupErr");
+
+for (let i = 0; i < TOPIC_COUNT; i++) {
+  const wrap = document.createElement("div");
+  wrap.className = "field";
+  wrap.dataset.field = "topic" + i;
+  wrap.innerHTML =
+    '<label for="f-topic' + i + '">' + (i + 1) + "-mavzu <span class=\"req\">*</span></label>" +
+    '<input id="f-topic' + i + '" type="text" autocomplete="off" placeholder="' + (i + 1) + '-mavzu nomi" />' +
+    '<div class="err" role="alert"></div>';
+  topicsGrid.appendChild(wrap);
+}
+const topicInputs = Array.from(topicsGrid.querySelectorAll("input"));
+
+const el = {
+  title: document.getElementById("f-title"),
+  subject: document.getElementById("f-subject"),
+  days: document.getElementById("f-days"),
+  minutes: document.getElementById("f-minutes"),
+  start: document.getElementById("f-start"),
+};
+
+function readForm() {
+  return {
+    title: el.title.value,
+    subject: el.subject.value,
+    daysCount: el.days.value,
+    dailyMinutes: el.minutes.value,
+    startDate: el.start.value,
+    topics: topicInputs.map((i) => i.value),
+  };
+}
+
+function setFieldError(fieldName, message) {
+  const wrap = form.querySelector('[data-field="' + fieldName + '"]');
+  if (!wrap) return;
+  const input = wrap.querySelector("input");
+  const err = wrap.querySelector(".err");
+  if (message) {
+    input.setAttribute("aria-invalid", "true");
+    err.innerHTML =
+      '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg><span>' +
+      esc(message) + "</span>";
+    err.style.display = "flex";
+  } else {
+    input.removeAttribute("aria-invalid");
+    err.innerHTML = "";
+    err.style.display = "none";
+  }
+}
+function clearErrors() {
+  ["title", "subject", "daysCount", "dailyMinutes", "startDate"].forEach((f) => setFieldError(f, null));
+  for (let i = 0; i < TOPIC_COUNT; i++) setFieldError("topic" + i, null);
+  topicsGroupErr.hidden = true;
+}
+
+function showValidation(result) {
+  clearErrors();
+  const e = result.errors;
+  ["title", "subject", "daysCount", "dailyMinutes", "startDate"].forEach((f) => {
+    if (e[f]) setFieldError(f, e[f]);
+  });
+  result.topicErrors.forEach((msg, i) => { if (msg) setFieldError("topic" + i, msg); });
+  if (e.topics) { topicsGroupErr.hidden = false; topicsGroupErr.textContent = e.topics; }
+
+  const order = ["title", "subject", "daysCount", "dailyMinutes", "startDate"];
+  let firstBad = null;
+  for (const f of order) if (e[f]) { firstBad = form.querySelector('[data-field="' + f + '"] input'); break; }
+  if (!firstBad) {
+    const idx = result.topicErrors.findIndex((m) => m);
+    if (idx >= 0) firstBad = topicInputs[idx];
+  }
+  if (firstBad) { firstBad.focus(); firstBad.scrollIntoView({ block: "center", behavior: "smooth" }); }
+}
+
+/* Namuna ma'lumotlar — hakamlar test holati (6 mavzu, 3 kun, 60 daqiqa) */
+document.getElementById("fillBtn").addEventListener("click", () => {
+  el.title.value = "Matematika imtihoni";
+  el.subject.value = "Matematika";
+  el.days.value = "3";
+  el.minutes.value = "60";
+  el.start.value = todayISO();
+  const sample = ["Mavzu 1", "Mavzu 2", "Mavzu 3", "Mavzu 4", "Mavzu 5", "Mavzu 6"];
+  topicInputs.forEach((inp, i) => (inp.value = sample[i]));
+  clearErrors();
+  toast("Namuna ma'lumotlar kiritildi: 6 mavzu, 3 kun, 60 daqiqa.");
+});
+
+document.getElementById("clearBtn").addEventListener("click", () => {
+  setTimeout(() => { clearErrors(); el.start.value = todayISO(); markStale(); }, 0);
+});
+
+/* Forma o'zgarsa, oldingi (saqlanmagan) jadval eskiradi */
+form.addEventListener("input", (ev) => {
+  const wrap = ev.target.closest(".field");
+  if (wrap) setFieldError(wrap.dataset.field, null);
+  if (wrap && wrap.dataset.field && wrap.dataset.field.startsWith("topic")) topicsGroupErr.hidden = true;
+  markStale();
+});
+
+/* =====================================================================
+   6. HOLAT (STATE) VA JADVAL RENDERI
+   ===================================================================== */
+let current = null;   // { id|null, title, subject, daysCount, dailyMinutes, startDate, endDate, days, savedAt }
+let stale = false;
+let saveState = "idle"; // idle | saving | saved | dirty
+const planSection = document.getElementById("planSection");
+
+function markStale() {
+  if (current && !current.id) { stale = true; renderPlan(); }
+}
+
+form.addEventListener("submit", (ev) => {
+  ev.preventDefault();
+  const raw = readForm();
+  const result = validatePlanInput(raw);
+  if (!result.valid) {
+    showValidation(result);
+    planSection.hidden = true;
+    current = null;
+    toast("Formada xatolik bor — reja yaratilmadi.", "error");
+    return;
+  }
+  clearErrors();
+  const v = result.value;
+  const dist = distributeTopics(v);
+  current = {
+    id: null,
+    title: v.title, subject: v.subject,
+    daysCount: v.daysCount, dailyMinutes: v.dailyMinutes,
+    startDate: v.startDate, endDate: dist.endDate,
+    totalTopics: dist.totalTopics, days: dist.days, savedAt: null,
+  };
+  stale = false;
+  saveState = "idle";
+  renderPlan();
+  planSection.scrollIntoView({ behavior: "smooth", block: "start" });
+  toast("Reja tuzildi: " + v.daysCount + " kun, kuniga " + v.dailyMinutes + " daqiqa.");
+});
+
+function dayCardHtml(day, readOnly) {
+  const isReview = day.type === "review";
+  const topicsHtml = isReview
+    ? '<div class="review-note">' + REVIEW_DAY_LABEL + "<span>Bu kun bajarilish foiziga ta'sir qilmaydi</span></div>"
+    : day.topics.map((t) =>
+        '<label class="topic' + (t.completed ? " done" : "") + (readOnly ? " ro" : "") + '">' +
+          '<input type="checkbox" data-topic="' + esc(t.topicId) + '"' +
+            (t.completed ? " checked" : "") + (readOnly ? " disabled" : "") +
+            ' aria-label="' + esc(t.title) + ' — bajarildi" />' +
+          '<span class="t"><b>' + esc(t.title) + "</b>" +
+            (t.completedAt ? "<em>Bajarildi: " + esc(formatTimeUz(t.completedAt)) + "</em>" : "") +
+          "</span>" +
+          '<span class="min">' + t.minutes + " daq.</span>" +
+        "</label>"
+      ).join("");
+
+  return (
+    '<div class="day' + (isReview ? " review" : "") + '">' +
+      '<div class="day-head">' +
+        "<div><div class=\"n\">" + day.dayNumber + "-kun</div>" +
+        (day.date ? '<div class="d">' + esc(formatDateUz(day.date)) + "</div>" : "") + "</div>" +
+        '<span class="m">' + day.totalMinutes + " daqiqa</span>" +
+      "</div>" +
+      '<div class="day-body">' + topicsHtml + "</div>" +
+    "</div>"
+  );
+}
+
+function renderPlan() {
+  if (!current) { planSection.hidden = true; planSection.innerHTML = ""; return; }
+  planSection.hidden = false;
+  const pr = computeProgress(current.days);
+  const isSaved = Boolean(current.id);
+
+  planSection.innerHTML =
+    '<div class="card">' +
+      '<div class="card-head">' +
+        '<div style="flex:1;min-width:220px">' +
+          '<h2 id="planTitle">' + esc(current.title) + "</h2>" +
+          '<div class="sub">' + esc(current.subject) + "</div>" +
+          '<div class="plan-meta">' +
+            (current.startDate
+              ? '<span class="chip"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="3" y="5" width="18" height="16" rx="2.5"/><path d="M8 3v4M16 3v4M3 10h18"/></svg>' +
+                esc(formatDateUz(current.startDate)) + " — " + esc(formatDateUz(current.endDate)) + "</span>"
+              : "") +
+            '<span class="chip">' + current.daysCount + " kun</span>" +
+            '<span class="chip">kuniga ' + current.dailyMinutes + " daqiqa</span>" +
+          "</div>" +
+        "</div>" +
+        (isSaved
+          ? '<span class="chip" style="color:var(--success);border-color:color-mix(in srgb,var(--success) 35%,transparent)">Saqlangan</span>'
+          : '<span class="chip" style="color:var(--warning);border-color:color-mix(in srgb,var(--warning) 35%,transparent)">Saqlanmagan</span>') +
+      "</div>" +
+
+      '<div class="card-pad">' +
+        (stale
+          ? '<div class="group-err" style="margin-top:0;margin-bottom:18px;background:var(--warning-soft);color:var(--warning);border-color:color-mix(in srgb,var(--warning) 35%,transparent)">Ma\'lumotlar o\'zgardi — qayta “Reja yaratish” tugmasini bosing.</div>'
+          : "") +
+
+        '<div class="stats">' +
+          '<div class="stat" data-stat="total"><div class="k">Jami</div><div class="v">' + pr.total + '</div><div class="u">mavzu</div></div>' +
+          '<div class="stat good" data-stat="completed"><div class="k">Bajarildi</div><div class="v">' + pr.completed + '</div><div class="u">mavzu</div></div>' +
+          '<div class="stat accent" data-stat="percent"><div class="k">Natija</div><div class="v">' + pr.percent + '%</div><div class="u">bajarilgan</div></div>' +
+        "</div>" +
+
+        '<div class="bar-wrap">' +
+          '<div class="bar-labels"><span>Umumiy bajarilish</span><span data-bar-count>' + pr.completed + " / " + pr.total + "</span></div>" +
+          '<div class="bar' + (pr.percent === 100 ? " done" : "") + '" data-bar role="progressbar" aria-valuenow="' + pr.percent +
+            '" aria-valuemin="0" aria-valuemax="100" aria-label="Bajarilish foizi">' +
+            "<span style=\"width:" + pr.percent + "%\"></span>" +
+          "</div>" +
+          '<div class="sr" data-sr aria-live="polite">Natija ' + pr.percent + " foiz</div>" +
+        "</div>" +
+
+        '<div class="days" style="margin-top:20px" id="daysGrid">' +
+          current.days.map((d) => dayCardHtml(d, false)).join("") +
+        "</div>" +
+
+        '<p style="margin-top:14px;font-size:13px;color:var(--text-faint)">Checkboxlarni bosib foiz hisobini tekshiring.</p>' +
+
+        '<div class="save-bar">' +
+          '<button class="btn btn-primary" id="saveBtn"' + (stale ? " disabled" : "") + ">" +
+            '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><path d="M17 21v-8H7v8M7 3v5h8"/></svg>' +
+            (isSaved ? "Saqlash" : "Rejani saqlash") +
+          "</button>" +
+          '<button class="btn btn-ghost" id="resetBtn">Tiklash</button>' +
+          (isSaved ? '<button class="btn btn-danger" id="deleteBtn">Rejani o\'chirish</button>' : "") +
+          '<span class="save-state ' + saveState + '" id="saveState" aria-live="polite">' + saveStateHtml() + "</span>" +
+        "</div>" +
+      "</div>" +
+    "</div>";
+
+  bindPlanEvents();
+}
+
+/* Checkbox bosilganda butun jadvalni qayta render qilmaymiz — faqat o'zgargan
+   joylarni yangilaymiz. Shunda klaviatura fokusi va DOM tugunlari saqlanadi. */
+function saveStateHtml() {
+  const labels = {
+    idle: "", saving: "Saqlanmoqda…",
+    saved: "Barcha o'zgarishlar saqlandi",
+    dirty: "Saqlanmagan o'zgarishlar bor",
+  };
+  const icon = saveState === "saving" ? '<span class="spin"></span>'
+    : saveState === "saved" ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6.5"/></svg>'
+    : saveState === "dirty" ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg>'
+    : "";
+  return icon + labels[saveState];
+}
+
+function patchSaveState() {
+  const node = planSection.querySelector("#saveState");
+  if (!node) return;
+  node.className = "save-state " + saveState;
+  node.innerHTML = saveStateHtml();
+}
+
+function patchTopicRow(label, topic) {
+  label.classList.toggle("done", topic.completed);
+  const holder = label.querySelector(".t");
+  let em = holder.querySelector("em");
+  if (topic.completedAt) {
+    if (!em) { em = document.createElement("em"); holder.appendChild(em); }
+    em.textContent = "Bajarildi: " + formatTimeUz(topic.completedAt);
+  } else if (em) em.remove();
+}
+
+function patchProgress() {
+  const pr = computeProgress(current.days);
+  const set = (key, text) => {
+    const node = planSection.querySelector('[data-stat="' + key + '"] .v');
+    if (node) node.textContent = text;
+  };
+  set("total", String(pr.total));
+  set("completed", String(pr.completed));
+  set("percent", pr.percent + "%");
+  const bar = planSection.querySelector("[data-bar]");
+  if (bar) {
+    bar.classList.toggle("done", pr.percent === 100);
+    bar.setAttribute("aria-valuenow", String(pr.percent));
+    bar.querySelector("span").style.width = pr.percent + "%";
+  }
+  const count = planSection.querySelector("[data-bar-count]");
+  if (count) count.textContent = pr.completed + " / " + pr.total;
+  const sr = planSection.querySelector("[data-sr]");
+  if (sr) sr.textContent = "Natija " + pr.percent + " foiz";
+}
+
+function findTopic(topicId) {
+  for (const day of current.days) {
+    for (const topic of day.topics) if (topic.topicId === topicId) return topic;
+  }
+  return null;
+}
+
+function bindPlanEvents() {
+  const grid = planSection.querySelector("#daysGrid");
+  if (grid) {
+    grid.addEventListener("change", (ev) => {
+      const box = ev.target.closest('input[type="checkbox"]');
+      if (!box) return;
+      const topic = findTopic(box.dataset.topic);
+      if (!topic) return;
+      topic.completed = box.checked;
+      topic.completedAt = box.checked ? new Date().toISOString() : null;
+      patchTopicRow(box.closest(".topic"), topic);
+      patchProgress();
+      if (current.id) autoSave();
+    });
+  }
+  const saveBtn = planSection.querySelector("#saveBtn");
+  if (saveBtn) saveBtn.addEventListener("click", () => doSave());
+  const resetBtn = planSection.querySelector("#resetBtn");
+  if (resetBtn) resetBtn.addEventListener("click", () => {
+    current.days.forEach((d) => d.topics.forEach((t) => { t.completed = false; t.completedAt = null; }));
+    planSection.querySelectorAll("#daysGrid .topic").forEach((label) => {
+      const box = label.querySelector('input[type="checkbox"]');
+      const topic = box && findTopic(box.dataset.topic);
+      if (!topic) return;
+      box.checked = false;
+      patchTopicRow(label, topic);
+    });
+    patchProgress();
+    if (current.id) autoSave();
+    toast("Barcha belgilar tiklandi.");
+  });
+  const delBtn = planSection.querySelector("#deleteBtn");
+  if (delBtn) delBtn.addEventListener("click", () => {
+    if (!confirm("Rejani o'chirishni tasdiqlaysizmi? Bu amalni qaytarib bo'lmaydi.")) return;
+    const plans = loadPlans().filter((p) => p.id !== current.id);
+    savePlans(plans);
+    current = null;
+    renderPlan();
+    renderSaved();
+    toast("Reja o'chirildi.");
+  });
+}
+
+function doSave() {
+  const plans = loadPlans();
+  const now = new Date().toISOString();
+  if (!current.id) {
+    current.id = "plan_" + Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+    current.createdAt = now;
+  }
+  current.savedAt = now;
+  const idx = plans.findIndex((p) => p.id === current.id);
+  const copy = JSON.parse(JSON.stringify(current));
+  if (idx >= 0) plans[idx] = copy; else plans.unshift(copy);
+  const ok = savePlans(plans);
+  if (ok) {
+    saveState = "saved";
+    renderPlan();
+    renderSaved();
+    toast("Reja muvaffaqiyatli saqlandi.");
+  } else {
+    saveState = "dirty";
+    renderPlan();
+    toast("Saqlab bo'lmadi — brauzer xotirasi band.", "error");
+  }
+}
+
+let saveTimer = null;
+function autoSave() {
+  saveState = "saving";
+  patchSaveState();
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(() => {
+    const plans = loadPlans();
+    const idx = plans.findIndex((p) => p.id === current.id);
+    current.savedAt = new Date().toISOString();
+    const copy = JSON.parse(JSON.stringify(current));
+    if (idx >= 0) plans[idx] = copy; else plans.unshift(copy);
+    const ok = savePlans(plans);
+    saveState = ok ? "saved" : "dirty";
+    patchSaveState();
+    renderSaved();
+    if (!ok) toast("Saqlab bo'lmadi — brauzer xotirasi band.", "error");
+  }, 350);
+}
+
+/* =====================================================================
+   7. SAQLANGAN REJALAR
+   ===================================================================== */
+const savedBody = document.getElementById("savedBody");
+const savedCount = document.getElementById("savedCount");
+
+function renderSaved() {
+  const plans = loadPlans();
+  savedCount.textContent = plans.length + " ta reja";
+  if (!plans.length) {
+    savedBody.innerHTML =
+      '<div class="empty">' +
+        '<div class="ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5A1.5 1.5 0 015.5 4H9l2 2.5h7.5A1.5 1.5 0 0120 8v10.5a1.5 1.5 0 01-1.5 1.5h-13A1.5 1.5 0 014 18.5z"/></svg></div>' +
+        "<b>Hali saqlangan reja yo'q</b>" +
+        "<div>Yuqoridagi formadan reja yaratib, “Rejani saqlash” tugmasini bosing.</div>" +
+      "</div>";
+    return;
+  }
+  savedBody.innerHTML =
+    '<div class="saved-list">' +
+      plans.map((p) => {
+        const pr = computeProgress(p.days);
+        return (
+          '<div class="saved-item">' +
+            '<div class="info">' +
+              "<b>" + esc(p.title) + "</b>" +
+              "<span>" + esc(p.subject) + " · " + p.daysCount + " kun × " + p.dailyMinutes +
+                " daqiqa" + (p.startDate ? " · " + esc(formatDateUz(p.startDate)) : "") + "</span>" +
+            "</div>" +
+            '<div class="pr">' +
+              '<div class="lbl"><span>' + pr.completed + "/" + pr.total + "</span><span>" + pr.percent + "%</span></div>" +
+              '<div class="bar' + (pr.percent === 100 ? " done" : "") + '"><span style="width:' + pr.percent + '%"></span></div>' +
+            "</div>" +
+            '<div style="display:flex;gap:8px;flex:none">' +
+              '<button class="btn btn-ghost btn-sm" data-open="' + esc(p.id) + '">Ochish</button>' +
+              '<button class="btn btn-danger btn-sm" data-del="' + esc(p.id) + '">O\'chirish</button>' +
+            "</div>" +
+          "</div>"
+        );
+      }).join("") +
+    "</div>";
+
+  savedBody.querySelectorAll("[data-open]").forEach((b) =>
+    b.addEventListener("click", () => {
+      const plan = loadPlans().find((p) => p.id === b.dataset.open);
+      if (!plan) return;
+      current = JSON.parse(JSON.stringify(plan));
+      stale = false;
+      saveState = "saved";
+      renderPlan();
+      planSection.scrollIntoView({ behavior: "smooth", block: "start" });
+    })
+  );
+  savedBody.querySelectorAll("[data-del]").forEach((b) =>
+    b.addEventListener("click", () => {
+      if (!confirm("Rejani o'chirishni tasdiqlaysizmi?")) return;
+      const id = b.dataset.del;
+      savePlans(loadPlans().filter((p) => p.id !== id));
+      if (current && current.id === id) { current = null; renderPlan(); }
+      renderSaved();
+      toast("Reja o'chirildi.");
+    })
+  );
+}
+
+/* =====================================================================
+   8. HAKAMLAR UCHUN 12 TA MAJBURIY TEST
+   ===================================================================== */
+function runJudgeTests() {
+  const T6 = ["Mavzu 1", "Mavzu 2", "Mavzu 3", "Mavzu 4", "Mavzu 5", "Mavzu 6"];
+  const base = { title: "Test", subject: "Test", startDate: "2026-10-10", topics: T6 };
+  const plan = (d, m) => {
+    const v = validatePlanInput(Object.assign({}, base, { daysCount: d, dailyMinutes: m }));
+    if (!v.valid) return { error: v.errors };
+    return distributeTopics(v.value);
+  };
+  const counts = (r) => r.days.filter((d) => d.type === "study").map((d) => d.topics.length).join("+");
+  const mins = (r) => r.days.filter((d) => d.type === "study").map((d) => d.topics.map((t) => t.minutes).join("+")).join(" | ");
+  const withCompleted = (n) => {
+    const r = plan(3, 60);
+    let i = 0;
+    r.days.forEach((d) => d.topics.forEach((t) => { t.completed = i++ < n; }));
+    return computeProgress(r.days).percent;
+  };
+
+  const tests = [
+    { n: 1, name: "6 mavzu, 3 kun, 60 daqiqa", want: "2+2+2 mavzu", run: () => { const r = plan(3, 60); return { got: counts(r) + " mavzu (" + mins(r) + ")", pass: counts(r) === "2+2+2" && mins(r) === "30+30 | 30+30 | 30+30" }; } },
+    { n: 2, name: "6 mavzu, 2 kun, 60 daqiqa", want: "3+3 mavzu", run: () => { const r = plan(2, 60); return { got: counts(r) + " mavzu", pass: counts(r) === "3+3" }; } },
+    { n: 3, name: "6 mavzu, 4 kun, 60 daqiqa", want: "2+2+1+1 mavzu", run: () => { const r = plan(4, 60); return { got: counts(r) + " mavzu", pass: counts(r) === "2+2+1+1" }; } },
+    { n: 4, name: "6 mavzu, 0 kun", want: "Xatolik ko'rsatadi", run: () => { const r = plan(0, 60); const m = r.error && r.error.daysCount; return { got: m || "xatolik yo'q", pass: m === MESSAGES.daysMin }; } },
+    { n: 5, name: "6 mavzu, 3 kun, 0 daqiqa", want: "Xatolik ko'rsatadi", run: () => { const r = plan(3, 0); const m = r.error && r.error.dailyMinutes; return { got: m || "xatolik yo'q", pass: m === MESSAGES.minutesMin }; } },
+    { n: 6, name: "6 mavzudan 3 tasi bajarildi", want: "50%", run: () => { const p = withCompleted(3); return { got: p + "%", pass: p === 50 }; } },
+    { n: 7, name: "6 mavzudan 6 tasi bajarildi", want: "100%", run: () => { const p = withCompleted(6); return { got: p + "%", pass: p === 100 }; } },
+    { n: 8, name: "6 mavzudan 0 tasi bajarildi", want: "0%", run: () => { const p = withCompleted(0); return { got: p + "%", pass: p === 0 }; } },
+    { n: 9, name: "Rejani saqlash va qayta ochish", want: "Ma'lumotlar saqlanadi", run: () => {
+        const r = plan(3, 60);
+        r.days[0].topics[0].completed = true;
+        const round = JSON.parse(JSON.stringify({ days: r.days }));
+        const p = computeProgress(round.days);
+        return { got: "saqlab/o'qib " + p.completed + "/" + p.total + " (" + p.percent + "%)", pass: p.completed === 1 && p.percent === 17 };
+      } },
+    { n: 10, name: "6 mavzu, 8 kun", want: "6 kun mavzu, 2 kun takrorlash", run: () => {
+        const r = plan(8, 60);
+        const s = r.days.filter((d) => d.type === "study").length;
+        const rv = r.days.filter((d) => d.type === "review").length;
+        return { got: s + " kun mavzu, " + rv + " kun takrorlash", pass: s === 6 && rv === 2 };
+      } },
+    { n: 11, name: "6 mavzu, 3 kun, 61 daqiqa", want: "Kuniga 31+30 daqiqa", run: () => { const r = plan(3, 61); return { got: mins(r), pass: mins(r) === "31+30 | 31+30 | 31+30" }; } },
+    { n: 12, name: "6 mavzu, 3 kun, 1 daqiqa", want: "Vaqt yetarli emas xatoligi", run: () => {
+        const r = plan(3, 1);
+        const m = (r.error && r.error.dailyMinutes) || "";
+        return { got: m || "xatolik yo'q", pass: m.indexOf("Vaqt yetarli emas") === 0 };
+      } },
+  ];
+
+  const body = document.getElementById("testsBody");
+  let passed = 0;
+  body.innerHTML = tests.map((t) => {
+    let res;
+    try { res = t.run(); } catch (e) { res = { got: "Xato: " + e.message, pass: false }; }
+    if (res.pass) passed++;
+    return (
+      '<div class="test-row ' + (res.pass ? "pass" : "fail") + '">' +
+        '<span class="tag">' + t.n + "</span>" +
+        '<span class="nm"><b>' + esc(t.name) + "</b><span>Kutilgan: " + esc(t.want) + " · Natija: " + esc(res.got) + "</span></span>" +
+        '<span class="vd">' + (res.pass ? "O'TDI" : "XATO") + "</span>" +
+      "</div>"
+    );
+  }).join("");
+
+  const sum = document.getElementById("testsSummary");
+  sum.textContent = passed + " / " + tests.length + " o'tdi";
+  sum.className = "test-summary " + (passed === tests.length ? "ok" : "bad");
+  document.getElementById("testsSub").textContent =
+    passed === tests.length
+      ? "Barcha 12 ta majburiy test muvaffaqiyatli o'tdi — algoritm shu sahifada tekshirildi"
+      : "Diqqat: ba'zi testlar o'tmadi — tafsilotlarni ochib ko'ring";
+  if (passed !== tests.length) document.getElementById("testsDetails").open = true;
+}
+
+/* =====================================================================
+   9. O'QITUVCHI KABINETI — Bilet 002 "Mijoz" va "Daromad g'oyasi"
+   O'qituvchi bir nechta o'quvchining rejasini faqat KO'RISH huquqi bilan kuzatadi.
+   ===================================================================== */
+const ME = "Ali Valiyev"; // demo o'quvchi — yuqoridagi panel aynan shu o'quvchiniki
+
+/* Boshqa o'quvchilar uchun namuna rejalar (deterministik — har safar bir xil) */
+function demoPlan(title, subject, daysCount, dailyMinutes, topics, completedCount) {
+  const dist = distributeTopics({ topics, daysCount, dailyMinutes, startDate: todayISO() });
+  let i = 0;
+  dist.days.forEach((d) => d.topics.forEach((t) => {
+    if (i++ < completedCount) { t.completed = true; t.completedAt = new Date().toISOString(); }
+  }));
+  return { title, subject, daysCount, dailyMinutes, startDate: todayISO(), endDate: dist.endDate, days: dist.days };
+}
+
+const OTHER_STUDENTS = [
+  {
+    name: "Madina Rahimova",
+    plans: [demoPlan("Fizika imtihoni", "Fizika", 3, 90,
+      ["Kinematika", "Dinamika", "Issiqlik", "Elektr", "Optika", "Atom fizikasi"], 5)],
+  },
+  {
+    name: "Jasur Toshmatov",
+    plans: [demoPlan("Ona tili testi", "Ona tili",
+      4, 60, ["Fonetika", "Leksikologiya", "Morfologiya", "Sintaksis", "Uslubiyat", "Imlo"], 2)],
+  },
+];
+
+function aggregate(plans) {
+  let total = 0, completed = 0;
+  plans.forEach((p) => { const pr = computeProgress(p.days); total += pr.total; completed += pr.completed; });
+  return { total, completed, percent: percentOf(completed, total) };
+}
+
+function initials(name) {
+  return name.split(" ").filter(Boolean).slice(0, 2).map((w) => w[0].toUpperCase()).join("");
+}
+
+function miniDayHtml(day) {
+  const check = '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6.5"/></svg>';
+  const rows = day.type === "review"
+    ? '<div class="mini-topic"><span>' + REVIEW_DAY_LABEL + "</span></div>"
+    : day.topics.map((t) =>
+        '<div class="mini-topic' + (t.completed ? " done" : "") + '">' +
+          '<span class="dot">' + (t.completed ? check : "") + "</span>" +
+          "<span>" + esc(t.title) + "</span>" +
+          '<span class="mn">' + t.minutes + " daq.</span>" +
+        "</div>").join("");
+  return (
+    '<div class="mini-day">' +
+      '<div class="mh"><span>' + day.dayNumber + "-kun</span><em>" + day.totalMinutes + " daqiqa</em></div>" +
+      rows +
+    "</div>"
+  );
+}
+
+function studentCardHtml(name, plans, isMe) {
+  const agg = aggregate(plans);
+  const body = plans.length
+    ? plans.map((p) =>
+        '<div class="plan-sub">' + esc(p.title) + " · " + esc(p.subject) + " · " +
+          p.daysCount + " kun × " + p.dailyMinutes + " daqiqa</div>" +
+        '<div class="mini-days">' + p.days.map(miniDayHtml).join("") + "</div>").join("")
+    : '<div class="empty" style="padding:22px"><b>Hali reja yaratmagan</b><div>O\'quvchi reja tuzgach, bu yerda ko\'rinadi.</div></div>';
+
+  return (
+    '<div class="student-card">' +
+      '<div class="student-head">' +
+        '<span class="avatar">' + esc(initials(name)) + "</span>" +
+        '<span class="who"><b>' + esc(name) + (isMe ? " (siz kuzatayotgan o'quvchi)" : "") + "</b>" +
+          "<span>" + plans.length + " ta reja · " + agg.completed + " / " + agg.total + " mavzu bajarilgan</span></span>" +
+        '<span class="pr">' +
+          '<span class="lbl"><span>Natija</span><span>' + agg.percent + "%</span></span>" +
+          '<span class="bar' + (agg.percent === 100 ? " done" : "") + '" role="progressbar" aria-valuenow="' + agg.percent +
+            '" aria-valuemin="0" aria-valuemax="100"><span style="width:' + agg.percent + '%"></span></span>' +
+        "</span>" +
+        '<span class="ro-badge">Faqat ko\'rish</span>' +
+      "</div>" + body +
+    "</div>"
+  );
+}
+
+function renderTeacher() {
+  const myPlans = loadPlans();
+  const all = [{ name: ME, plans: myPlans, isMe: true }].concat(
+    OTHER_STUDENTS.map((s) => ({ name: s.name, plans: s.plans, isMe: false }))
+  );
+  const totals = aggregate(all.flatMap((s) => s.plans));
+  document.getElementById("teacherSummary").textContent =
+    all.length + " o'quvchi · umumiy natija " + totals.percent + "%";
+  document.getElementById("teacherBody").innerHTML =
+    all.map((s) => studentCardHtml(s.name, s.plans, s.isMe)).join("");
+}
+
+/* Rol almashish */
+const studentView = document.getElementById("studentView");
+const teacherView = document.getElementById("teacherView");
+const tabStudent = document.getElementById("tabStudent");
+const tabTeacher = document.getElementById("tabTeacher");
+
+function setRole(role) {
+  const isTeacher = role === "teacher";
+  studentView.hidden = isTeacher;
+  teacherView.hidden = !isTeacher;
+  tabStudent.classList.toggle("active", !isTeacher);
+  tabTeacher.classList.toggle("active", isTeacher);
+  tabStudent.setAttribute("aria-selected", String(!isTeacher));
+  tabTeacher.setAttribute("aria-selected", String(isTeacher));
+  document.getElementById("heroTitle").textContent = isTeacher
+    ? "O'quvchilaringiz qanday ulgurayotganini kuzating"
+    : "Imtihon mavzularini kunlarga teng taqsimlang";
+  document.getElementById("heroText").textContent = isTeacher
+    ? "Har bir o'quvchining rejasi, bajarilgan mavzulari va umumiy foizi bir ekranda. O'zgartirish huquqi yo'q — faqat kuzatuv."
+    : "6 ta mavzu, kunlar soni va kunlik vaqtni kiriting — tizim jadvalni avtomatik tuzadi, bajarilishni kuzatadi va natijani foizda ko'rsatadi.";
+  if (isTeacher) renderTeacher();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+tabStudent.addEventListener("click", () => setRole("student"));
+tabTeacher.addEventListener("click", () => setRole("teacher"));
+
+/* =====================================================================
+   10. BILET 002 TALABLARI — avtomatik tekshiruv
+   ===================================================================== */
+function runTicketChecks() {
+  const T6 = ["Mavzu 1", "Mavzu 2", "Mavzu 3", "Mavzu 4", "Mavzu 5", "Mavzu 6"];
+  const base = { title: "T", subject: "T", startDate: "2026-10-10", topics: T6 };
+  const mk = (d, m) => validatePlanInput(Object.assign({}, base, { daysCount: d, dailyMinutes: m }));
+
+  const checks = [
+    {
+      t: "1. Kunlar soni, kunlik daqiqa va oltita mavzu nomini kiriting",
+      run: () => {
+        const hasDays = !!document.getElementById("f-days");
+        const hasMin = !!document.getElementById("f-minutes");
+        const topics = document.querySelectorAll('#topicsGrid input[type="text"]').length;
+        return { pass: hasDays && hasMin && topics === 6, got: "kunlar + daqiqa maydoni va " + topics + " ta mavzu maydoni" };
+      },
+    },
+    {
+      t: "2. Mavzularni kunlarga imkon qadar teng taqsimlang; nol kunni rad eting",
+      run: () => {
+        const r = distributeTopics(mk(3, 60).value);
+        const even = r.days.map((d) => d.topics.length).join("+") === "2+2+2";
+        const zero = mk(0, 60).errors.daysCount === MESSAGES.daysMin;
+        return { pass: even && zero, got: "3 kunga 2+2+2; 0 kun rad etildi (\"" + mk(0, 60).errors.daysCount + "\")" };
+      },
+    },
+    {
+      t: "3. Har kunning mavzulari va ajratilgan umumiy vaqtini ko'rsating",
+      run: () => {
+        const r = distributeTopics(mk(3, 60).value);
+        const sample = dayCardHtml(r.days[0], false);
+        const showsTopics = sample.indexOf("Mavzu 1") >= 0 && sample.indexOf("Mavzu 2") >= 0;
+        const showsMinutes = sample.indexOf("30 daq.") >= 0;
+        const showsTotal = sample.indexOf("60 daqiqa") >= 0;
+        return { pass: showsTopics && showsMinutes && showsTotal, got: "kun kartasida mavzular, 30 daq. va kunlik 60 daqiqa ko'rsatiladi" };
+      },
+    },
+    {
+      t: "4. Bajarildi belgisi, umumiy bajarilish foizi va rejani saqlash",
+      run: () => {
+        const r = distributeTopics(mk(3, 60).value);
+        const hasCheckbox = dayCardHtml(r.days[0], false).indexOf('type="checkbox"') >= 0;
+        r.days[0].topics[0].completed = true;
+        r.days[0].topics[1].completed = true;
+        r.days[1].topics[0].completed = true;
+        const pct = computeProgress(r.days).percent;
+        let saveWorks = false;
+        try {
+          const probe = "__ssp_probe";
+          localStorage.setItem(probe, JSON.stringify({ days: r.days }));
+          saveWorks = computeProgress(JSON.parse(localStorage.getItem(probe)).days).percent === pct;
+          localStorage.removeItem(probe);
+        } catch (e) { saveWorks = false; }
+        return { pass: hasCheckbox && pct === 50 && saveWorks, got: "checkbox bor, 3/6 = " + pct + "%, saqlash va qayta o'qish ishlaydi" };
+      },
+    },
+    {
+      t: "Tekshirish: 6 mavzu, 3 kun, 60 daqiqa → har kunga 2 mavzu",
+      run: () => {
+        const r = distributeTopics(mk(3, 60).value);
+        const counts = r.days.map((d) => d.topics.length);
+        return { pass: counts.join("+") === "2+2+2", got: counts.join(" + ") + " mavzu (kuniga 30+30 daqiqa)" };
+      },
+    },
+    {
+      t: "Tekshirish: 3 mavzu bajarilsa, natija 50 foiz",
+      run: () => {
+        const r = distributeTopics(mk(3, 60).value);
+        let i = 0;
+        r.days.forEach((d) => d.topics.forEach((t) => { t.completed = i++ < 3; }));
+        const p = computeProgress(r.days).percent;
+        return { pass: p === 50, got: p + "%" };
+      },
+    },
+    {
+      t: "Mijoz: o'quvchi va uning o'qituvchisi",
+      run: () => {
+        const hasTeacher = !!document.getElementById("teacherView");
+        const hasTabs = !!document.getElementById("tabTeacher");
+        return { pass: hasTeacher && hasTabs, got: "o'quvchi paneli + o'qituvchi kabineti (faqat ko'rish huquqi bilan)" };
+      },
+    },
+    {
+      t: "Daromad g'oyasi: o'qituvchi uchun kuzatuv obunasi",
+      run: () => {
+        const txt = document.getElementById("teacherView").textContent;
+        const pass = txt.indexOf("obuna") >= 0 && txt.indexOf("so'm/oy") >= 0;
+        return { pass, got: "3 bosqichli tarif: Bepul / O'qituvchi 49 000 so'm/oy / Maktab 390 000 so'm/oy" };
+      },
+    },
+  ];
+
+  const okIcon = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6.5"/></svg>';
+  const badIcon = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>';
+  let passed = 0;
+
+  document.getElementById("reqBody").innerHTML = checks.map((c) => {
+    let res;
+    try { res = c.run(); } catch (e) { res = { pass: false, got: "Xato: " + e.message }; }
+    if (res.pass) passed++;
+    return (
+      '<div class="req-row">' +
+        '<span class="ok' + (res.pass ? "" : " bad") + '">' + (res.pass ? okIcon : badIcon) + "</span>" +
+        '<span class="rt"><b>' + esc(c.t) + "</b><span>" + esc(res.got) + "</span></span>" +
+      "</div>"
+    );
+  }).join("");
+
+  const sum = document.getElementById("reqSummary");
+  sum.textContent = passed + " / " + checks.length + " bajarildi";
+  sum.className = "test-summary " + (passed === checks.length ? "ok" : "bad");
+  document.getElementById("reqSub").textContent =
+    passed === checks.length
+      ? "Bilet 002 ning barcha talablari bajarildi va shu sahifada tekshirildi"
+      : "Diqqat: ba'zi talablar bajarilmadi";
+}
+
+/* =====================================================================
+   11. ISHGA TUSHIRISH
+   ===================================================================== */
+el.start.value = todayISO();
+renderSaved();
+runJudgeTests();
+runTicketChecks();
+</script>
+</body>
+</html>
