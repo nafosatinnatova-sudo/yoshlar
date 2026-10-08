@@ -16,12 +16,11 @@ boshqaradigan va o'quvchi faoliyatini o'qituvchiga kuzatish imkonini beradigan x
 internetsiz ishlaydigan to'liq ishlaydigan prototip: reja yaratish, teng taqsimlash,
 checkbox bilan belgilash, foiz hisobi, saqlash va o'qituvchi kabineti.
 
-Sahifaning o'zida ikkita avtomatik tekshiruv bo'limi bor:
+Sahifaning o'zida avtomatik tekshiruv bo'limi bor:
 
-- **Bilet 002 — talablar bajarilishi** (8 ta band)
 - **Hakamlar uchun majburiy testlar** (12 ta test)
 
-Ikkalasi ham sahifa ochilishi bilan ishga tushadi va natijani ko'rsatadi.
+U sahifa ochilishi bilan ishga tushadi va natijani ko'rsatadi.
 
 ---
 

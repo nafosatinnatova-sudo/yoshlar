@@ -128,18 +128,6 @@
   .biz .bk { display: flex; align-items: center; gap: 8px; font-size: 12.5px; font-weight: 700; color: var(--primary-text); text-transform: uppercase; letter-spacing: .04em; }
   .biz p { margin-top: 7px; font-size: 13.6px; color: var(--text-muted); }
   .biz b { color: var(--text); }
-  .req-row {
-    display: flex; align-items: flex-start; gap: 11px; padding: 10px 12px; border-radius: 9px; font-size: 13.6px;
-  }
-  .req-row:nth-child(odd) { background: var(--surface-2); }
-  .req-row .ok {
-    flex: none; width: 22px; height: 22px; border-radius: 7px; display: grid; place-items: center;
-    background: var(--success-soft); color: var(--success);
-  }
-  .req-row .bad { background: var(--danger-soft); color: var(--danger); }
-  .req-row .rt { flex: 1; min-width: 0; }
-  .req-row .rt b { display: block; font-weight: 600; }
-  .req-row .rt span { font-size: 12.4px; color: var(--text-muted); }
 
   /* O'qituvchi paneli */
   .student-card {
@@ -353,34 +341,6 @@
   .spin { width: 13px; height: 13px; border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%; animation: spin .7s linear infinite; }
   @keyframes spin { to { transform: rotate(360deg); } }
 
-  /* ---------- Tests ---------- */
-  .test-row {
-    display: flex; align-items: center; gap: 11px; padding: 9px 12px;
-    border-radius: 9px; font-size: 13.5px; border: 1px solid transparent;
-  }
-  .test-row:nth-child(odd) { background: var(--surface-2); }
-  .test-row .tag {
-    flex: none; width: 26px; height: 26px; border-radius: 7px; display: grid; place-items: center;
-    font-size: 12px; font-weight: 700; background: var(--bg-soft); color: var(--text-muted);
-  }
-  .test-row .nm { flex: 1; min-width: 0; }
-  .test-row .nm b { display: block; font-weight: 600; }
-  .test-row .nm span { font-size: 12.3px; color: var(--text-muted); word-break: break-word; }
-  .test-row .vd {
-    flex: none; font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 999px;
-  }
-  .test-row.pass .vd { background: var(--success-soft); color: var(--success); }
-  .test-row.fail .vd { background: var(--danger-soft); color: var(--danger); }
-  .test-row.fail { border-color: color-mix(in srgb, var(--danger) 40%, transparent); background: var(--danger-soft); }
-  .test-summary { font-size: 13.5px; font-weight: 700; }
-  .test-summary.ok { color: var(--success); }
-  .test-summary.bad { color: var(--danger); }
-
-  details.tests > summary { cursor: pointer; list-style: none; }
-  details.tests > summary::-webkit-details-marker { display: none; }
-  .chev { transition: transform .2s ease; }
-  details[open] .chev { transform: rotate(180deg); }
-
   /* ---------- Toast ---------- */
   #toasts {
     position: fixed; z-index: 60; bottom: 20px; right: 20px;
@@ -582,58 +542,6 @@
     </div>
   </section>
 </div><!-- /teacherView -->
-
-  <!-- ============ BILET 002 TALABLARI ============ -->
-  <section class="section card">
-    <div class="card-head">
-      <div style="flex:1;min-width:200px">
-        <h2>Bilet 002 — talablar bajarilishi</h2>
-        <div class="sub" id="reqSub">Har bir talab shu sahifada avtomatik tekshiriladi</div>
-      </div>
-      <span class="test-summary" id="reqSummary"></span>
-    </div>
-    <div class="card-pad">
-      <div class="biz-grid" style="margin-bottom:18px">
-        <div class="biz">
-          <div class="bk">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5"/><path d="M16.5 5.2a3.2 3.2 0 010 5.6M19 3a6.5 6.5 0 010 10"/></svg>
-            Mijoz
-          </div>
-          <p>Imtihonga tayyorlanayotgan <b>o'quvchi</b> va uning <b>o'qituvchisi</b>.</p>
-        </div>
-        <div class="biz">
-          <div class="bk">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><path d="M12 2v20M17 6.5c0-2-2.2-3-5-3s-5 1-5 3 2 2.7 5 3.5 5 1.5 5 3.5-2.2 3-5 3-5-1-5-3"/></svg>
-            Daromad g'oyasi
-          </div>
-          <p>O'qituvchi uchun <b>bir nechta o'quvchi rejasini kuzatish obunasi</b> — oylik to'lov.</p>
-        </div>
-        <div class="biz">
-          <div class="bk">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h9"/></svg>
-            Vazifa
-          </div>
-          <p>O'quvchiga vaqtini mavzular bo'yicha <b>taqsimlash</b> va bajarilgan ishni <b>kuzatish</b> xizmati.</p>
-        </div>
-      </div>
-      <div id="reqBody" style="display:flex;flex-direction:column;gap:2px"></div>
-    </div>
-  </section>
-
-  <!-- ============ TESTS ============ -->
-  <section class="section card">
-    <details class="tests" id="testsDetails">
-      <summary class="card-head">
-        <div style="flex:1;min-width:200px">
-          <h2>Hakamlar uchun majburiy testlar</h2>
-          <div class="sub" id="testsSub">12 ta test holati — algoritm bevosita shu sahifada tekshiriladi</div>
-        </div>
-        <span class="test-summary" id="testsSummary"></span>
-        <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
-      </summary>
-      <div class="card-pad" id="testsBody" style="display:flex;flex-direction:column;gap:2px"></div>
-    </details>
-  </section>
 
   <div class="note">
     <strong>Eslatma:</strong> bu bitta faylli demo — ma'lumotlar brauzer xotirasida (localStorage) saqlanadi.
@@ -1374,82 +1282,7 @@ function renderSaved() {
 }
 
 /* =====================================================================
-   8. HAKAMLAR UCHUN 12 TA MAJBURIY TEST
-   ===================================================================== */
-function runJudgeTests() {
-  const T6 = ["Mavzu 1", "Mavzu 2", "Mavzu 3", "Mavzu 4", "Mavzu 5", "Mavzu 6"];
-  const base = { title: "Test", subject: "Test", startDate: "2026-10-10", topics: T6 };
-  const plan = (d, m) => {
-    const v = validatePlanInput(Object.assign({}, base, { daysCount: d, dailyMinutes: m }));
-    if (!v.valid) return { error: v.errors };
-    return distributeTopics(v.value);
-  };
-  const counts = (r) => r.days.filter((d) => d.type === "study").map((d) => d.topics.length).join("+");
-  const mins = (r) => r.days.filter((d) => d.type === "study").map((d) => d.topics.map((t) => t.minutes).join("+")).join(" | ");
-  const withCompleted = (n) => {
-    const r = plan(3, 60);
-    let i = 0;
-    r.days.forEach((d) => d.topics.forEach((t) => { t.completed = i++ < n; }));
-    return computeProgress(r.days).percent;
-  };
-
-  const tests = [
-    { n: 1, name: "6 mavzu, 3 kun, 60 daqiqa", want: "2+2+2 mavzu", run: () => { const r = plan(3, 60); return { got: counts(r) + " mavzu (" + mins(r) + ")", pass: counts(r) === "2+2+2" && mins(r) === "30+30 | 30+30 | 30+30" }; } },
-    { n: 2, name: "6 mavzu, 2 kun, 60 daqiqa", want: "3+3 mavzu", run: () => { const r = plan(2, 60); return { got: counts(r) + " mavzu", pass: counts(r) === "3+3" }; } },
-    { n: 3, name: "6 mavzu, 4 kun, 60 daqiqa", want: "2+2+1+1 mavzu", run: () => { const r = plan(4, 60); return { got: counts(r) + " mavzu", pass: counts(r) === "2+2+1+1" }; } },
-    { n: 4, name: "6 mavzu, 0 kun", want: "Xatolik ko'rsatadi", run: () => { const r = plan(0, 60); const m = r.error && r.error.daysCount; return { got: m || "xatolik yo'q", pass: m === MESSAGES.daysMin }; } },
-    { n: 5, name: "6 mavzu, 3 kun, 0 daqiqa", want: "Xatolik ko'rsatadi", run: () => { const r = plan(3, 0); const m = r.error && r.error.dailyMinutes; return { got: m || "xatolik yo'q", pass: m === MESSAGES.minutesMin }; } },
-    { n: 6, name: "6 mavzudan 3 tasi bajarildi", want: "50%", run: () => { const p = withCompleted(3); return { got: p + "%", pass: p === 50 }; } },
-    { n: 7, name: "6 mavzudan 6 tasi bajarildi", want: "100%", run: () => { const p = withCompleted(6); return { got: p + "%", pass: p === 100 }; } },
-    { n: 8, name: "6 mavzudan 0 tasi bajarildi", want: "0%", run: () => { const p = withCompleted(0); return { got: p + "%", pass: p === 0 }; } },
-    { n: 9, name: "Rejani saqlash va qayta ochish", want: "Ma'lumotlar saqlanadi", run: () => {
-        const r = plan(3, 60);
-        r.days[0].topics[0].completed = true;
-        const round = JSON.parse(JSON.stringify({ days: r.days }));
-        const p = computeProgress(round.days);
-        return { got: "saqlab/o'qib " + p.completed + "/" + p.total + " (" + p.percent + "%)", pass: p.completed === 1 && p.percent === 17 };
-      } },
-    { n: 10, name: "6 mavzu, 8 kun", want: "6 kun mavzu, 2 kun takrorlash", run: () => {
-        const r = plan(8, 60);
-        const s = r.days.filter((d) => d.type === "study").length;
-        const rv = r.days.filter((d) => d.type === "review").length;
-        return { got: s + " kun mavzu, " + rv + " kun takrorlash", pass: s === 6 && rv === 2 };
-      } },
-    { n: 11, name: "6 mavzu, 3 kun, 61 daqiqa", want: "Kuniga 31+30 daqiqa", run: () => { const r = plan(3, 61); return { got: mins(r), pass: mins(r) === "31+30 | 31+30 | 31+30" }; } },
-    { n: 12, name: "6 mavzu, 3 kun, 1 daqiqa", want: "Vaqt yetarli emas xatoligi", run: () => {
-        const r = plan(3, 1);
-        const m = (r.error && r.error.dailyMinutes) || "";
-        return { got: m || "xatolik yo'q", pass: m.indexOf("Vaqt yetarli emas") === 0 };
-      } },
-  ];
-
-  const body = document.getElementById("testsBody");
-  let passed = 0;
-  body.innerHTML = tests.map((t) => {
-    let res;
-    try { res = t.run(); } catch (e) { res = { got: "Xato: " + e.message, pass: false }; }
-    if (res.pass) passed++;
-    return (
-      '<div class="test-row ' + (res.pass ? "pass" : "fail") + '">' +
-        '<span class="tag">' + t.n + "</span>" +
-        '<span class="nm"><b>' + esc(t.name) + "</b><span>Kutilgan: " + esc(t.want) + " · Natija: " + esc(res.got) + "</span></span>" +
-        '<span class="vd">' + (res.pass ? "O'TDI" : "XATO") + "</span>" +
-      "</div>"
-    );
-  }).join("");
-
-  const sum = document.getElementById("testsSummary");
-  sum.textContent = passed + " / " + tests.length + " o'tdi";
-  sum.className = "test-summary " + (passed === tests.length ? "ok" : "bad");
-  document.getElementById("testsSub").textContent =
-    passed === tests.length
-      ? "Barcha 12 ta majburiy test muvaffaqiyatli o'tdi — algoritm shu sahifada tekshirildi"
-      : "Diqqat: ba'zi testlar o'tmadi — tafsilotlarni ochib ko'ring";
-  if (passed !== tests.length) document.getElementById("testsDetails").open = true;
-}
-
-/* =====================================================================
-   9. O'QITUVCHI KABINETI — Bilet 002 "Mijoz" va "Daromad g'oyasi"
+   8. O'QITUVCHI KABINETI — Bilet 002 "Mijoz" va "Daromad g'oyasi"
    O'qituvchi bir nechta o'quvchining rejasini faqat KO'RISH huquqi bilan kuzatadi.
    ===================================================================== */
 const ME = "Ali Valiyev"; // demo o'quvchi — yuqoridagi panel aynan shu o'quvchiniki
@@ -1570,130 +1403,10 @@ tabStudent.addEventListener("click", () => setRole("student"));
 tabTeacher.addEventListener("click", () => setRole("teacher"));
 
 /* =====================================================================
-   10. BILET 002 TALABLARI — avtomatik tekshiruv
-   ===================================================================== */
-function runTicketChecks() {
-  const T6 = ["Mavzu 1", "Mavzu 2", "Mavzu 3", "Mavzu 4", "Mavzu 5", "Mavzu 6"];
-  const base = { title: "T", subject: "T", startDate: "2026-10-10", topics: T6 };
-  const mk = (d, m) => validatePlanInput(Object.assign({}, base, { daysCount: d, dailyMinutes: m }));
-
-  const checks = [
-    {
-      t: "1. Kunlar soni, kunlik daqiqa va oltita mavzu nomini kiriting",
-      run: () => {
-        const hasDays = !!document.getElementById("f-days");
-        const hasMin = !!document.getElementById("f-minutes");
-        const topics = document.querySelectorAll('#topicsGrid input[type="text"]').length;
-        return { pass: hasDays && hasMin && topics === 6, got: "kunlar + daqiqa maydoni va " + topics + " ta mavzu maydoni" };
-      },
-    },
-    {
-      t: "2. Mavzularni kunlarga imkon qadar teng taqsimlang; nol kunni rad eting",
-      run: () => {
-        const r = distributeTopics(mk(3, 60).value);
-        const even = r.days.map((d) => d.topics.length).join("+") === "2+2+2";
-        const zero = mk(0, 60).errors.daysCount === MESSAGES.daysMin;
-        return { pass: even && zero, got: "3 kunga 2+2+2; 0 kun rad etildi (\"" + mk(0, 60).errors.daysCount + "\")" };
-      },
-    },
-    {
-      t: "3. Har kunning mavzulari va ajratilgan umumiy vaqtini ko'rsating",
-      run: () => {
-        const r = distributeTopics(mk(3, 60).value);
-        const sample = dayCardHtml(r.days[0], false);
-        const showsTopics = sample.indexOf("Mavzu 1") >= 0 && sample.indexOf("Mavzu 2") >= 0;
-        const showsMinutes = sample.indexOf("30 daq.") >= 0;
-        const showsTotal = sample.indexOf("60 daqiqa") >= 0;
-        return { pass: showsTopics && showsMinutes && showsTotal, got: "kun kartasida mavzular, 30 daq. va kunlik 60 daqiqa ko'rsatiladi" };
-      },
-    },
-    {
-      t: "4. Bajarildi belgisi, umumiy bajarilish foizi va rejani saqlash",
-      run: () => {
-        const r = distributeTopics(mk(3, 60).value);
-        const hasCheckbox = dayCardHtml(r.days[0], false).indexOf('type="checkbox"') >= 0;
-        r.days[0].topics[0].completed = true;
-        r.days[0].topics[1].completed = true;
-        r.days[1].topics[0].completed = true;
-        const pct = computeProgress(r.days).percent;
-        let saveWorks = false;
-        try {
-          const probe = "__ssp_probe";
-          localStorage.setItem(probe, JSON.stringify({ days: r.days }));
-          saveWorks = computeProgress(JSON.parse(localStorage.getItem(probe)).days).percent === pct;
-          localStorage.removeItem(probe);
-        } catch (e) { saveWorks = false; }
-        return { pass: hasCheckbox && pct === 50 && saveWorks, got: "checkbox bor, 3/6 = " + pct + "%, saqlash va qayta o'qish ishlaydi" };
-      },
-    },
-    {
-      t: "Tekshirish: 6 mavzu, 3 kun, 60 daqiqa → har kunga 2 mavzu",
-      run: () => {
-        const r = distributeTopics(mk(3, 60).value);
-        const counts = r.days.map((d) => d.topics.length);
-        return { pass: counts.join("+") === "2+2+2", got: counts.join(" + ") + " mavzu (kuniga 30+30 daqiqa)" };
-      },
-    },
-    {
-      t: "Tekshirish: 3 mavzu bajarilsa, natija 50 foiz",
-      run: () => {
-        const r = distributeTopics(mk(3, 60).value);
-        let i = 0;
-        r.days.forEach((d) => d.topics.forEach((t) => { t.completed = i++ < 3; }));
-        const p = computeProgress(r.days).percent;
-        return { pass: p === 50, got: p + "%" };
-      },
-    },
-    {
-      t: "Mijoz: o'quvchi va uning o'qituvchisi",
-      run: () => {
-        const hasTeacher = !!document.getElementById("teacherView");
-        const hasTabs = !!document.getElementById("tabTeacher");
-        return { pass: hasTeacher && hasTabs, got: "o'quvchi paneli + o'qituvchi kabineti (faqat ko'rish huquqi bilan)" };
-      },
-    },
-    {
-      t: "Daromad g'oyasi: o'qituvchi uchun kuzatuv obunasi",
-      run: () => {
-        const txt = document.getElementById("teacherView").textContent;
-        const pass = txt.indexOf("obuna") >= 0 && txt.indexOf("so'm/oy") >= 0;
-        return { pass, got: "3 bosqichli tarif: Bepul / O'qituvchi 49 000 so'm/oy / Maktab 390 000 so'm/oy" };
-      },
-    },
-  ];
-
-  const okIcon = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6.5"/></svg>';
-  const badIcon = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>';
-  let passed = 0;
-
-  document.getElementById("reqBody").innerHTML = checks.map((c) => {
-    let res;
-    try { res = c.run(); } catch (e) { res = { pass: false, got: "Xato: " + e.message }; }
-    if (res.pass) passed++;
-    return (
-      '<div class="req-row">' +
-        '<span class="ok' + (res.pass ? "" : " bad") + '">' + (res.pass ? okIcon : badIcon) + "</span>" +
-        '<span class="rt"><b>' + esc(c.t) + "</b><span>" + esc(res.got) + "</span></span>" +
-      "</div>"
-    );
-  }).join("");
-
-  const sum = document.getElementById("reqSummary");
-  sum.textContent = passed + " / " + checks.length + " bajarildi";
-  sum.className = "test-summary " + (passed === checks.length ? "ok" : "bad");
-  document.getElementById("reqSub").textContent =
-    passed === checks.length
-      ? "Bilet 002 ning barcha talablari bajarildi va shu sahifada tekshirildi"
-      : "Diqqat: ba'zi talablar bajarilmadi";
-}
-
-/* =====================================================================
-   11. ISHGA TUSHIRISH
+   9. ISHGA TUSHIRISH
    ===================================================================== */
 el.start.value = todayISO();
 renderSaved();
-runJudgeTests();
-runTicketChecks();
 </script>
 </body>
 </html>
