@@ -6,6 +6,9 @@ dist/
 build/
 coverage/
 
+# mongod binari keshi (xotiradagi MongoDB uchun, deploy paytida yuklanadi)
+.cache/
+
 # Muhit o'zgaruvchilari — maxfiy kalitlar hech qachon GitHub'ga tushmasin
 .env
 .env.local

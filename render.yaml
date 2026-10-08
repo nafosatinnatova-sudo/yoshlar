@@ -1,10 +1,13 @@
 # Render Blueprint — Smart Study Planner
 #
 # 1-xizmat: statik demo sahifa (baza talab qilmaydi, darhol ishlaydi).
-# 2-xizmat: to'liq ilova (Express API + React frontend). U MongoDB Atlas
-#           ulanish satrini talab qiladi, shuning uchun hozircha o'chirilgan.
-#           Yoqish uchun quyidagi blokning izohini (#) olib tashlang va
-#           Render boshqaruv panelida MONGODB_URI hamda JWT_SECRET ni kiriting.
+# 2-xizmat: to'liq ilova — bitta Node xizmati Express API ni ham, qurilgan
+#           React frontendni ham beradi (server/src/client.js orqali).
+#
+# Baza: MONGODB_URI o'rnatilsa — o'sha baza (masalan MongoDB Atlas).
+#       O'rnatilmasa — xotiradagi MongoDB (demo rejimi): ilova ishlaydi,
+#       demo hisoblar har ishga tushishda yaratiladi, lekin ma'lumotlar
+#       qayta ishga tushganda yo'qoladi.
 
 services:
   - type: web
@@ -18,22 +21,28 @@ services:
         name: X-Frame-Options
         value: SAMEORIGIN
 
-  # - type: web
-  #   name: smart-study-planner
-  #   runtime: node
-  #   region: frankfurt
-  #   plan: free
-  #   buildCommand: npm run build
-  #   startCommand: npm start
-  #   healthCheckPath: /api/health
-  #   envVars:
-  #     - key: NODE_VERSION
-  #       value: "20"
-  #     - key: NODE_ENV
-  #       value: production
-  #     - key: SEED_DEMO
-  #       value: "true"
-  #     - key: JWT_SECRET
-  #       generateValue: true
-  #     - key: MONGODB_URI
-  #       sync: false   # qiymat Render panelida qo'lda kiritiladi (maxfiy)
+  - type: web
+    name: smart-study-planner
+    runtime: node
+    region: frankfurt
+    plan: free
+    # Ildizdagi package.json skriptlari: server bog'liqliklari, client/dist, mongod binari.
+    buildCommand: npm run build
+    startCommand: npm start
+    healthCheckPath: /api/health
+    pullRequestPreviewsEnabled: false
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: NODE_ENV
+        value: production
+      - key: SEED_DEMO
+        value: "true"
+      - key: JWT_SECRET
+        generateValue: true
+      # mongod binari build paytida yuklanib, runtime'ga o'tishi uchun
+      # kesh repo papkasi ichida bo'lishi kerak (Render'ning ish papkasi).
+      - key: MONGOMS_DOWNLOAD_DIR
+        value: /opt/render/project/src/.cache/mongodb-binaries
+      # Doimiy baza kerak bo'lsa, MONGODB_URI ni Render panelida qo'shing —
+      # kod o'zgarmaydi, xotiradagi baza o'chadi.

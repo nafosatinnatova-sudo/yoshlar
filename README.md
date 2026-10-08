@@ -150,12 +150,31 @@ Maxfiy kalitlar `.gitignore` orqali repozitoriyadan chiqarib tashlangan.
 
 ## Deploy (Render)
 
+Ildizdagi `package.json` butun monorepo'ni bitta Node xizmati sifatida yig'adi:
+
+| Skript | Vazifasi |
+|---|---|
+| `npm run build` | `server` bog'liqliklari (dev'siz) + `client` bog'liqliklari va `client/dist` |
+| `npm start` | `server/src/index.js` — API va qurilgan frontend bitta portda |
+| `npm run install:all` | lokal ishlash uchun ikkala papka bog'liqliklari (dev bilan) |
+
 `render.yaml` Blueprint ikkita xizmatni tavsiflaydi:
 
 1. **smart-study-planner-demo** — statik demo sahifa, baza talab qilmaydi.
-2. **smart-study-planner** — to'liq ilova (hozircha izohga olingan). Yoqish uchun
-   izohni olib tashlang va Render panelida `MONGODB_URI` ni (MongoDB Atlas
-   ulanish satri) kiriting; `JWT_SECRET` avtomatik generatsiya qilinadi.
+2. **smart-study-planner** — to'liq ilova (Express API + React frontend bitta
+   xizmatda). Build: `npm run build`, start: `npm start`, health check:
+   `/api/health`.
+
+Render panelida faqat bitta maxfiy qiymat kiritiladi — `MONGODB_URI`
+(MongoDB Atlas ulanish satri). `JWT_SECRET` avtomatik generatsiya qilinadi,
+`NODE_VERSION=22` va `NODE_ENV=production` Blueprint'da belgilangan.
+
+> Xizmat Render panelida qo'lda yaratilgan bo'lsa, standart `yarn` / `yarn start`
+> buyruqlari yetarli emas: **Build Command** ni `npm run build`, **Start Command**
+> ni `npm start` qilib o'zgartiring (yoki Blueprint sifatida qayta ulang).
+
+Frontend `VITE_API_URL` bo'sh bo'lganda so'rovlarni o'z manzilidan (`/api/...`)
+yuboradi, shuning uchun bitta xizmat uchun qo'shimcha sozlash kerak emas.
 
 ---
 

@@ -1,0 +1,17 @@
+{
+  "name": "smart-study-planner",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Smart Study Planner — monorepo: Express API (server/) + React SPA (client/). Ildiz manifesti deploy uchun: build va start skriptlari.",
+  "type": "module",
+  "engines": {
+    "node": "22.x"
+  },
+  "scripts": {
+    "install:all": "npm --prefix server ci --include=dev && npm --prefix client ci --include=dev",
+    "build": "npm --prefix server ci --omit=dev && npm --prefix client ci --include=dev && npm --prefix client run build && node server/src/prefetch-mongo.js",
+    "postinstall": "node scripts/postinstall.js",
+    "start": "node server/src/start.js",
+    "test": "npm --prefix server test && npm --prefix client test"
+  }
+}
